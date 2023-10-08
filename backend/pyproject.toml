@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "phone-numbers-beautifier-backend"
+version = "0.1.0"
+description = ""
+authors = ["Michael Tenetko <tenetko@users.noreply.github.com>"]
+readme = "README.md"
+packages = [{include = "phone_numbers_beautifier_backend"}]
+
+[tool.poetry.dependencies]
+python = "3.11.*"
+fastapi = "^0.103.2"
+python-multipart = "^0.0.6"
+pandas = "^2.1.1"
+openpyxl = "^3.1.2"
+uvicorn = "^0.23.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
