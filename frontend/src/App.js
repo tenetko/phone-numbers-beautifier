@@ -40,10 +40,23 @@ export default function App() {
     setUploading(true);
 
     axios
-      .post("http://localhost:8000/api/excel/handle/", formData, {})
-      .then((res) => {
+      .post("http://localhost:8000/api/excel/handle/", formData, {responseType: "blob"})
+
+      .then((response) => {
         setFileList([]);
         message.success("Файлы отправлены");
+        const disposition = response.headers['content-disposition'];
+        var filename = disposition.split(/;(.+)/)[1].split(/=(.+)/)[1];
+        if (filename.toLowerCase().startsWith("utf-8''"))
+          filename = decodeURIComponent(filename.replace("utf-8''", ''));
+        else
+          filename = filename.replace(/['"]/g, '');
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', filename);
+        document.body.appendChild(link);
+        link.click();
       })
 
       .catch(function (error) {
@@ -86,7 +99,12 @@ export default function App() {
         >
           <Upload {...props}>
             <Button style={buttonStyle} icon={<UploadOutlined />}>
-              Выгрузка из базы
+              Выгрузка из макроса
+            </Button>
+            <br />
+            <br />
+            <Button style={buttonStyle} icon={<UploadOutlined />}>
+              Файл Alive
             </Button>
             <br />
             <br />
@@ -97,11 +115,6 @@ export default function App() {
             <br />
             <Button style={buttonStyle} icon={<UploadOutlined />}>
               Файл с квотами
-            </Button>
-            <br />
-            <br />
-            <Button style={buttonStyle} icon={<UploadOutlined />}>
-              Файл Alive
             </Button>
           </Upload>
           <br />
