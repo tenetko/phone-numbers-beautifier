@@ -14,10 +14,10 @@ router = APIRouter()
 @router.post("/")
 async def handle_xlsx_files(files: list[UploadFile]) -> Response:
     config_maker = ConfigMaker()
-    beautifier = PhoneNumbersBeautifier()
-
     config = config_maker.make_config_file(io.BytesIO(files[1].file.read()))
-    beautified_df, empty_numbers, ignored_records = beautifier.run(io.BytesIO(files[0].file.read()), config, "tzb")
+
+    beautifier = PhoneNumbersBeautifier(config, "tzb")
+    beautified_df, empty_numbers, ignored_records = beautifier.run(io.BytesIO(files[0].file.read()))
 
     return export_to_file(beautified_df)
 

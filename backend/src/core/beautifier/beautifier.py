@@ -8,6 +8,10 @@ from pandas import DataFrame, Series
 
 
 class PhoneNumbersBeautifier:
+    def __init__(self, config, project_name):
+        self.config = config
+        self.project_name = project_name
+
     def parse_dataset(self, dataframe: DataFrame) -> Tuple[DataFrame, DataFrame, DataFrame]:
         records = []
         empty_phone_numbers = []
@@ -264,14 +268,11 @@ class PhoneNumbersBeautifier:
         df = pd.DataFrame(dataset)
         df.to_excel(file_name, index=False)
 
-    def run(self, data_file: BytesIO, config: Dict, project_name: str) -> Tuple[DataFrame, DataFrame, DataFrame]:
-        self.config = config
-        self.project_name = project_name
-
+    def run(self, data_file: BytesIO) -> Tuple[DataFrame, DataFrame, DataFrame]:
         dataframe = pd.read_excel(data_file)
         new_dataset, empty_phone_numbers, ignored_records = self.parse_dataset(dataframe)
         return new_dataset, empty_phone_numbers, ignored_records
 
         # self.dump_new_dataset(new_dataset)
         # self.dump_empty_phone_numbers_list(empty_phone_numbers)
-        # self.dump_ignored_operators_records(ignored_records)
+        # self.dump_ignored_operators_recors(ignored_records)
