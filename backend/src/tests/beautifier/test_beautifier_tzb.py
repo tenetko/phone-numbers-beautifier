@@ -174,24 +174,6 @@ def test_make_tailored_row_for_TZB(row_simple):
     assert result == expected_result
 
 
-def test_check_if_operator_is_forbidden_for_TZB_for_motiv_kurganskaya_oblast(row_for_motiv):
-    parsed_row = beautifier.parse_row(row_for_motiv)
-    tailored_row = beautifier.make_tailored_row_for_TZB(parsed_row)
-    result = beautifier.check_if_operator_is_forbidden_for_TZB(tailored_row)
-    expected_result = True
-
-    assert result == expected_result
-
-
-def test_check_if_operator_is_forbidden_for_TZB_for_any_other_combination(row_simple):
-    parsed_row = beautifier.parse_row(row_simple)
-    tailored_row = beautifier.make_tailored_row_for_TZB(parsed_row)
-    result = beautifier.check_if_operator_is_forbidden_for_TZB(tailored_row)
-    expected_result = False
-
-    assert result == expected_result
-
-
 def test_check_if_operator_is_allowed_for_TZB_for_yota_moscow(row_for_yota_moscow):
     parsed_row = beautifier.parse_row(row_for_yota_moscow)
     tailored_row = beautifier.make_tailored_row_for_TZB(parsed_row)

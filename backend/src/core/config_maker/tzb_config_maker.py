@@ -1,3 +1,4 @@
+from collections import defaultdict
 from datetime import time
 from io import BytesIO
 from typing import Dict, List
@@ -92,6 +93,16 @@ class ConfigMaker:
 
         return ignore
 
+    def make_allowed_operators_config(self, data_file: BytesIO) -> Dict[str, str]:
+        allowed_operators = defaultdict(list)
+
+        df = pd.read_excel(data_file, sheet_name="Oper-->Allowed_Region")
+
+        for _, row in df.iterrows():
+            allowed_operators[row["OPERATOR"]].append(row["REGION"])
+
+        return allowed_operators
+
     def make_config_file(self, data_file: BytesIO) -> Dict:
         config = {}
 
@@ -102,7 +113,6 @@ class ConfigMaker:
         config["time_difference"] = self.make_time_difference_config(data_file)
         config["intervals"] = self.make_intervals_config(data_file)
         config["ignores"] = self.make_ignore_config(data_file)
-        config["allowed_operators"] = {}
-        config["forbidden_operators"] = {}
+        config["allowed_operators"] = self.make_allowed_operators_config(data_file)
 
         return config

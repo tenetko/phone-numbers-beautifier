@@ -36,10 +36,6 @@ class PhoneNumbersBeautifier:
             if self.check_if_region_is_ignored(tailored_row):
                 continue
 
-            if self.project_name == "tzb" and self.check_if_operator_is_forbidden_for_TZB(tailored_row):
-                ignored_records.append(tailored_row)
-                continue
-
             if self.project_name == "tzb" and not self.check_if_operator_is_allowed_for_TZB(tailored_row):
                 ignored_records.append(tailored_row)
                 continue
@@ -212,16 +208,6 @@ class PhoneNumbersBeautifier:
 
         return False
 
-    def check_if_operator_is_forbidden_for_TZB(self, tailored_row: Dict[str, str]) -> bool:
-        forbidden_operator_regions = self.config["forbidden_operators"].get(tailored_row["OperatorName"], [])
-        if len(forbidden_operator_regions) == 0:
-            return False
-
-        if tailored_row["RegionName"] in forbidden_operator_regions:
-            return True
-
-        return False
-
     def check_if_operator_is_allowed_for_TZB(self, tailored_row: Dict[str, str]) -> bool:
         allowed_operator_regions = self.config["allowed_operators"].get(tailored_row["OperatorName"], [])
         if len(allowed_operator_regions) == 0:
@@ -238,41 +224,7 @@ class PhoneNumbersBeautifier:
 
         return False
 
-    def dump_new_dataset(self, dataset: List) -> None:
-        if not os.path.exists("./result"):
-            os.makedirs("./result")
-
-        timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M")
-        file_name = f"./result/base-{timestamp}.xlsx"
-
-        df = pd.DataFrame(dataset)
-        df.to_excel(file_name, index=False)
-
-    def dump_empty_phone_numbers_list(self, dataset: List) -> None:
-        if not os.path.exists("./result"):
-            os.makedirs("./result")
-
-        timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M")
-        file_name = f"./result/empty-{timestamp}.xlsx"
-
-        df = pd.DataFrame(dataset)
-        df.to_excel(file_name, index=False)
-
-    def dump_ignored_operators_records(self, dataset: List) -> None:
-        if not os.path.exists("./result"):
-            os.makedirs("./result")
-
-        timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M")
-        file_name = f"./result/ignored-{timestamp}.xlsx"
-
-        df = pd.DataFrame(dataset)
-        df.to_excel(file_name, index=False)
-
     def run(self, data_file: BytesIO) -> Tuple[DataFrame, DataFrame, DataFrame]:
         dataframe = pd.read_excel(data_file)
         new_dataset, empty_phone_numbers, ignored_records = self.parse_dataset(dataframe)
         return new_dataset, empty_phone_numbers, ignored_records
-
-        # self.dump_new_dataset(new_dataset)
-        # self.dump_empty_phone_numbers_list(empty_phone_numbers)
-        # self.dump_ignored_operators_recors(ignored_records)
