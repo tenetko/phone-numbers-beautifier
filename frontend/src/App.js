@@ -40,7 +40,7 @@ export default function App() {
     setUploading(true);
 
     axios
-      .post("http://localhost:8000/api/excel/handle/", formData, {responseType: "blob"})
+      .post("/api/excel/handle/", formData, {responseType: "blob"})
 
       .then((response) => {
         setFileList([]);
@@ -129,7 +129,13 @@ export default function App() {
           >
             {uploading ? "Загружаем..." : "Загрузить"}
           </Button>
+          <br />
+          ver. 1.0
         </Space>
+        <br />
+        <br />        
+        <br />
+        <br />        
       </Content>
     </Layout>
   );
