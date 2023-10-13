@@ -25,6 +25,8 @@ class PhoneNumbersBeautifier:
             parsed_row = self.parse_row(row)
 
             if not self.check_if_region_is_allowed(parsed_row):
+                log_row = self.make_log_row_for_missing_region(parsed_row)
+                ignored_records.append(log_row)
                 continue
 
             tailored_row = self.make_tailored_row(parsed_row)
@@ -34,13 +36,20 @@ class PhoneNumbersBeautifier:
                 continue
 
             if self.check_if_region_is_ignored(tailored_row):
+                tailored_row["reason"] = (
+                    "это регион, у которого в 'Region-->TZB_Reg_code'" "стоит 0 в столбце 'Code_region_TZB'"
+                )
                 continue
 
             if self.project_name == "tzb" and not self.check_if_operator_is_allowed_for_TZB(tailored_row):
+                tailored_row["reason"] = (
+                    "эта комбинация 'регион + оператор' не разрешена," "см. вкладку 'Oper-->Allowed_Region'"
+                )
                 ignored_records.append(tailored_row)
                 continue
 
             if self.project_name == "tzb" and self.check_if_operator_is_other_for_TZB(tailored_row):
+                tailored_row["reason"] = "этот оператор - 'Другие'"
                 ignored_records.append(tailored_row)
                 continue
 
@@ -66,6 +75,36 @@ class PhoneNumbersBeautifier:
             return False
 
         return True
+
+    def make_log_row_for_missing_region(self, parsed_row: Dict[str, str]) -> Dict[str, str]:
+        result = {}
+
+        if self.project_name == "os":
+            result = self.make_log_row_for_missing_region_for_OS(parsed_row)
+
+        elif self.project_name == "tzb":
+            result = self.make_log_row_for_missing_region_for_TZB(parsed_row)
+
+        else:
+            raise NotImplementedError
+
+        return result
+
+    def make_log_row_for_missing_region_for_OS(self, parsed_row: Dict[str, str]) -> Dict[str, str]:
+        return {
+            "Number": parsed_row["phone_number"],
+            "DisplayField2": parsed_row["region"],
+            "oper": parsed_row["operator"],
+            "reason": "Такого региона нет на вкладке 'Region-->TZB_Reg_code'",
+        }
+
+    def make_log_row_for_missing_region_for_TZB(self, parsed_row: Dict[str, str]) -> Dict[str, str]:
+        return {
+            "Number": parsed_row["phone_number"],
+            "RegionName": parsed_row["region"],
+            "OperatorName": parsed_row["operator"],
+            "reason": "Такого региона нет на вкладке 'Region-->TZB_Reg_code'",
+        }
 
     def make_tailored_row(self, parsed_row: Dict[str, str]) -> Dict[str, str]:
         result = {}

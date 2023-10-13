@@ -107,7 +107,6 @@ class ConfigMaker:
         config = {}
 
         xlsx = pd.ExcelFile(data_file)
-        print(xlsx.sheet_names)
 
         config["regions"] = self.make_regions_config(data_file)
         config["region_codes"] = self.make_region_codes_config(data_file)

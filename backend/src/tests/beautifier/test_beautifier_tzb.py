@@ -154,6 +154,19 @@ def test_get_tzb_mark(row_simple):
     assert result == expected_result
 
 
+def test_make_log_row_for_TZB(row_simple):
+    parsed_row = beautifier.parse_row(row_simple)
+    result = beautifier.make_log_row_for_missing_region_for_TZB(parsed_row)
+    expected_result = {
+        "Number": "79001979228",
+        "RegionName": "Свердловская обл.",
+        "OperatorName": 'ООО "ЕКАТЕРИНБУРГ-2000"',
+        "reason": "Такого региона нет на вкладке 'Region-->TZB_Reg_code'",
+    }
+
+    assert result == expected_result
+
+
 def test_make_tailored_row_for_TZB(row_simple):
     parsed_row = beautifier.parse_row(row_simple)
     result = beautifier.make_tailored_row_for_TZB(parsed_row)

@@ -144,6 +144,19 @@ def test_get_operator(row_simple):
     assert result == expected_result
 
 
+def test_make_log_row_for_OS(row_simple):
+    parsed_row = beautifier.parse_row(row_simple)
+    result = beautifier.make_log_row_for_missing_region_for_OS(parsed_row)
+    expected_result = {
+        "Number": "79001979228",
+        "DisplayField2": "Свердловская обл.",
+        "oper": 'ООО "ЕКАТЕРИНБУРГ-2000"',
+        "reason": "Такого региона нет на вкладке 'Region-->TZB_Reg_code'",
+    }
+
+    assert result == expected_result
+
+
 def test_make_tailored_row_for_OS(row_simple):
     parsed_row = beautifier.parse_row(row_simple)
     result = beautifier.make_tailored_row_for_OS(parsed_row)
