@@ -39,8 +39,14 @@ export default function App() {
 
     setUploading(true);
 
+    const url = process.env.NODE_ENV === 'production'
+      ? '/api/excel/handle/'
+      : 'http://127.0.0.1:8000/api/excel/handle/'
+    
+    console.log(url)
+
     axios
-      .post("/api/excel/handle/", formData, {responseType: "blob"})
+      .post(url, formData, {responseType: "blob"})
 
       .then((response) => {
         setFileList([]);
@@ -130,7 +136,7 @@ export default function App() {
             {uploading ? "Загружаем..." : "Загрузить"}
           </Button>
           <br />
-          ver. 1.0
+          ver. 1.0.1 (with better 'ignored' sheet)
         </Space>
         <br />
         <br />        
