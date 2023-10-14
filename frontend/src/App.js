@@ -136,7 +136,7 @@ export default function App() {
             {uploading ? "Загружаем..." : "Загрузить"}
           </Button>
           <br />
-          ver. 1.0.1 (with better 'ignored' sheet)
+          ver. 1.0.2 (with gender and age)
         </Space>
         <br />
         <br />        
