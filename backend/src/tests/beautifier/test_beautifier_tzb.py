@@ -1,10 +1,7 @@
-from unittest.mock import patch
-
-import pandas as pd
-from fixtures import *
 from mocks import MOCK_DATA
 
 from src.core.beautifier.beautifier import PhoneNumbersBeautifier
+from src.tests.beautifier.fixtures import *
 
 beautifier = PhoneNumbersBeautifier(MOCK_DATA["config_tzb"], "tzb")
 

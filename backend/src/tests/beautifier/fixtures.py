@@ -1,5 +1,3 @@
-from typing import Dict
-
 from pandas import Series
 from pytest import fixture
 
