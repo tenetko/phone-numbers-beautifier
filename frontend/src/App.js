@@ -136,7 +136,7 @@ export default function App() {
             {uploading ? "Загружаем..." : "Загрузить"}
           </Button>
           <br />
-          ver. 1.0.2 (with gender and age)
+          ver. 1.0.3 (with better ignore tab, gender and age, and quotas filter)
         </Space>
         <br />
         <br />        

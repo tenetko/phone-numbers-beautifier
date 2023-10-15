@@ -17,7 +17,7 @@ class ConfigMaker:
 
         return regions
 
-    def make_region_codes_config(self, data_file: BytesIO) -> Dict[str, str]:
+    def make_region_codes_config(self, data_file: BytesIO) -> Dict[str, int]:
         region_codes = {}
 
         df = pd.read_excel(data_file, sheet_name="Region-->TZB_Reg_code")
@@ -93,7 +93,7 @@ class ConfigMaker:
 
         return ignore
 
-    def make_allowed_operators_config(self, data_file: BytesIO) -> Dict[str, str]:
+    def make_allowed_operators_config(self, data_file: BytesIO) -> Dict[str, list]:
         allowed_operators = defaultdict(list)
 
         df = pd.read_excel(data_file, sheet_name="Oper-->Allowed_Region")

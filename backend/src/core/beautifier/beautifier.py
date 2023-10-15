@@ -261,6 +261,9 @@ class PhoneNumbersBeautifier:
 
         return False
 
+    def get_refined_quota_region(self, region: str) -> str:
+        return self.config["regions"][region]
+
     def run(self, data_file: BytesIO) -> Tuple[DataFrame, DataFrame, DataFrame]:
         dataframe = pd.read_excel(data_file)
         new_dataset, empty_phone_numbers, ignored_records = self.parse_dataset(dataframe)

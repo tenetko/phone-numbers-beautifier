@@ -218,3 +218,10 @@ def test_check_if_operator_is_other_for_TZB_for_sim_telecom(row_for_sim_telecom)
     expected_result = True
 
     assert result == expected_result
+
+
+def test_get_refined_quota_region():
+    result = beautifier.get_refined_quota_region("Удмуртская Республика")
+    expected_result = "Республика Удмуртская"
+
+    assert result == expected_result
