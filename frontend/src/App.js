@@ -1,10 +1,11 @@
-import { Button, Layout, message, Space, Upload } from "antd";
+import { Button, Layout, message, Space, Typography, Upload } from "antd";
 import axios from "axios";
 import { useState } from "react";
 import { UploadOutlined } from "@ant-design/icons";
 import "antd/dist/reset.css";
 
 const { Content } = Layout;
+const { Text } = Typography;
 
 const buttonStyle = {
   textAlign: "center",
@@ -26,9 +27,15 @@ const submitButtonStyle = {
   backgroundColor: "#39008f",
 };
 
+const errorMessageStyle = {
+  textAlign: "center",
+  color: "#f00",  
+};
+
 export default function App() {
   const [fileList, setFileList] = useState([]);
   const [uploading, setUploading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleUpload = () => {
     const formData = new FormData();
@@ -43,8 +50,6 @@ export default function App() {
       ? '/api/excel/handle/'
       : 'http://127.0.0.1:8000/api/excel/handle/'
     
-    console.log(url)
-
     axios
       .post(url, formData, {responseType: "blob"})
 
@@ -65,8 +70,33 @@ export default function App() {
         link.click();
       })
 
-      .catch(function (error) {
+      .catch((error) => {
         message.error("Не получилось отправить файлы");
+        console.log(error)
+        if (
+          error.request.responseType === 'blob' &&
+          error.response.data instanceof Blob &&
+          error.response.data.type &&
+          error.response.data.type.toLowerCase().indexOf('json') !== -1
+        ) {
+          new Promise((resolve, reject) => {
+              let reader = new FileReader();
+              reader.onload = () => {
+                error.response.data = JSON.parse(reader.result);                
+                resolve(Promise.reject(error));
+              };
+    
+              reader.onerror = () => {
+                reject(error);
+              };
+    
+              reader.readAsText(error.response.data);
+            })
+
+            .catch(error => {
+              setErrorMessage(error.response.data);
+            })
+          };
       })
 
       .finally((res) => {
@@ -105,12 +135,12 @@ export default function App() {
         >
           <Upload {...props}>
             <Button style={buttonStyle} icon={<UploadOutlined />}>
-              Выгрузка из макроса
+              Файл Alive
             </Button>
             <br />
             <br />
             <Button style={buttonStyle} icon={<UploadOutlined />}>
-              Файл Alive
+              Выгрузка из макроса
             </Button>
             <br />
             <br />
@@ -136,7 +166,9 @@ export default function App() {
             {uploading ? "Загружаем..." : "Загрузить"}
           </Button>
           <br />
-          ver. 1.0.3 (with better ignore tab, gender and age, and quotas filter)
+          <Text code style={errorMessageStyle}>{errorMessage}</Text>
+          <br />
+          ver. 1.0.4 (with better ignore tab, gender and age, quotas filter, and error notifications)
         </Space>
         <br />
         <br />        

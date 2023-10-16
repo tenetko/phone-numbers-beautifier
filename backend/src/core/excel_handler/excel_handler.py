@@ -1,8 +1,11 @@
 import io
+import json
 from datetime import datetime
 
 import pandas as pd
-from fastapi import Response, UploadFile
+from fastapi import Response, UploadFile, status
+from fastapi.encoders import jsonable_encoder
+from fastapi.responses import JSONResponse
 from pandas import DataFrame
 
 from src.core.beautifier.beautifier import PhoneNumbersBeautifier
@@ -18,29 +21,66 @@ class ExcelHandler:
         self.config_maker = ConfigMaker()
 
     def run(self):
-        config = self.config_maker.make_config_file(io.BytesIO(self.files[1].file.read()))
-        beautifier = PhoneNumbersBeautifier(config, self.project_name)
-        extender = GenderAgeExtender()
-        quotas_filter = QuotasFilter(beautifier)
+        error = ""
+        try:
+            config = self.config_maker.make_config_file(io.BytesIO(self.files[0].file.read()))
+            beautifier = PhoneNumbersBeautifier(config, self.project_name)
+            extender = GenderAgeExtender()
+            quotas_filter = QuotasFilter(beautifier)
 
-        # Make the initial file structured for TZB
-        dataframes = beautifier.run(io.BytesIO(self.files[0].file.read()))
-        dataframes = list(dataframes)
+        except ValueError as error:
+            error_description = f"File name: {self.files[0].filename}, ValueError: {str(error)}"
+            return self.make_error_response(error_description)
 
-        # Add gender and age details to dataframes[0]
-        details_dataframe = pd.read_excel(io.BytesIO(self.files[2].file.read()))
-        dataframes[0] = extender.make_extended_dataframe(dataframes[0], details_dataframe)
+        except KeyError as error:
+            error_description = f"File name: {self.files[0].filename}, KeyError: {str(error)}"
+            return self.make_error_response(error_description)
 
-        # Add isCallable flag to dataframes[0]
-        quotas_dataframe = pd.read_excel(io.BytesIO(self.files[3].file.read()))
-        quota_application_results = quotas_filter.filter_phone_numbers_with_quotas(dataframes[0], quotas_dataframe)
+        try:
+            # Make the initial file structured for TZB
+            dataframes = beautifier.run(io.BytesIO(self.files[1].file.read()))
+            dataframes = list(dataframes)
 
-        dataframes[0] = quota_application_results[0]
-        dataframes.append(quota_application_results[1])
+        except ValueError as error:
+            error_description = f"File name: {self.files[1].filename}, ValueError: {str(error)}"
+            return self.make_error_response(error_description)
 
-        response = self.export_to_excel_file(dataframes)
+        except KeyError as error:
+            error_description = f"File name: {self.files[1].filename}, KeyError: {str(error)}"
+            return self.make_error_response(error_description)
 
-        return response
+        try:
+            # Add gender and age details to dataframes[0]
+            details_dataframe = pd.read_excel(io.BytesIO(self.files[2].file.read()))
+            dataframes[0] = extender.make_extended_dataframe(dataframes[0], details_dataframe)
+
+        except ValueError as error:
+            error_description = f"File name: {self.files[2].filename}, ValueError: {str(error)}"
+            return self.make_error_response(error_description)
+
+        except KeyError as error:
+            error_description = f"File name: {self.files[2].filename}, KeyError: {str(error)}"
+            return self.make_error_response(error_description)
+
+        try:
+            # Add isCallable flag to dataframes[0]
+            quotas_dataframe = pd.read_excel(io.BytesIO(self.files[3].file.read()))
+            quota_application_results = quotas_filter.filter_phone_numbers_with_quotas(dataframes[0], quotas_dataframe)
+
+            dataframes[0] = quota_application_results[0]
+            dataframes.append(quota_application_results[1])
+
+            response = self.export_to_excel_file(dataframes)
+
+            return response
+
+        except ValueError as error:
+            error_description = f"File name: {self.files[3].filename}, ValueError: {str(error)}"
+            return self.make_error_response(error_description)
+
+        except KeyError as error:
+            error_description = f"File name: {self.files[3].filename}, KeyError: {str(error)}"
+            return self.make_error_response(error_description)
 
     def export_to_excel_file(self, dataframes: [DataFrame]) -> Response:
         stream = io.BytesIO()
@@ -64,3 +104,7 @@ class ExcelHandler:
         now = datetime.now()
         timestamp = now.strftime("%Y-%m-%d_%H-%M")
         return f"result-{timestamp}.xlsx"
+
+    def make_error_response(self, error_text) -> JSONResponse:
+        text = jsonable_encoder(error_text)
+        return JSONResponse(content=text, status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
