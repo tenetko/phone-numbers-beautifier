@@ -1,5 +1,4 @@
 import io
-import json
 from datetime import datetime
 
 import pandas as pd
@@ -12,10 +11,11 @@ from src.core.beautifier.beautifier import PhoneNumbersBeautifier
 from src.core.config_maker.tzb_config_maker import ConfigMaker
 from src.core.gender_age_extender.gender_age_extender import GenderAgeExtender
 from src.core.quotas_filter.quotas_filter import QuotasFilter
+from src.core.quotas_parser.quotas_parser import QuotasParser
 
 
 class ExcelHandler:
-    def __init__(self, files: list[UploadFile], project_name: str):
+    def __init__(self, files: list[UploadFile], project_name: str) -> None:
         self.files = files
         self.project_name = project_name
         self.config_maker = ConfigMaker()
@@ -26,7 +26,6 @@ class ExcelHandler:
             config = self.config_maker.make_config_file(io.BytesIO(self.files[0].file.read()))
             beautifier = PhoneNumbersBeautifier(config, self.project_name)
             extender = GenderAgeExtender()
-            quotas_filter = QuotasFilter(beautifier)
 
         except ValueError as error:
             error_description = f"File name: {self.files[0].filename}, ValueError: {str(error)}"
@@ -62,28 +61,31 @@ class ExcelHandler:
             error_description = f"File name: {self.files[2].filename}, KeyError: {str(error)}"
             return self.make_error_response(error_description)
 
-        response = self.export_to_excel_file(dataframes)
-        return response
+        # response = self.export_to_excel_file(dataframes)
+        # return response
 
-        # try:
-        #     # Add isCallable flag to dataframes[0]
-        #     quotas_dataframe = pd.read_excel(io.BytesIO(self.files[3].file.read()))
-        #     quota_application_results = quotas_filter.filter_phone_numbers_with_quotas(dataframes[0], quotas_dataframe)
-        #
-        #     dataframes[0] = quota_application_results[0]
-        #     dataframes.append(quota_application_results[1])
-        #
-        #     response = self.export_to_excel_file(dataframes)
-        #
-        #     return response
-        #
-        # except ValueError as error:
-        #     error_description = f"File name: {self.files[3].filename}, ValueError: {str(error)}"
-        #     return self.make_error_response(error_description)
-        #
-        # except KeyError as error:
-        #     error_description = f"File name: {self.files[3].filename}, KeyError: {str(error)}"
-        #     return self.make_error_response(error_description)
+        try:
+            # Add isCallable flag to dataframes[0]
+            quotas_dataframe = pd.read_excel(io.BytesIO(self.files[3].file.read()))
+            quotas_parser = QuotasParser(beautifier)
+            quotas_filter = QuotasFilter()
+            quotas_dict = quotas_parser.make_quotas_dictionary(quotas_dataframe)
+            quota_application_results = quotas_filter.filter_phone_numbers(dataframes[0], quotas_dict)
+
+            dataframes[0] = quota_application_results[0]
+            dataframes.append(quota_application_results[1])
+
+            response = self.export_to_excel_file(dataframes)
+
+            return response
+
+        except ValueError as error:
+            error_description = f"File name: {self.files[3].filename}, ValueError: {str(error)}"
+            return self.make_error_response(error_description)
+
+        except KeyError as error:
+            error_description = f"File name: {self.files[3].filename}, KeyError: {str(error)}"
+            return self.make_error_response(error_description)
 
     def export_to_excel_file(self, dataframes: [DataFrame]) -> Response:
         stream = io.BytesIO()
@@ -92,7 +94,7 @@ class ExcelHandler:
             dataframes[0].to_excel(writer, sheet_name="base with quotas applied", index=False)
             dataframes[1].to_excel(writer, sheet_name="empty", index=False)
             dataframes[2].to_excel(writer, sheet_name="ignored", index=False)
-            # dataframes[3].to_excel(writer, sheet_name="quota errors", index=False)
+            dataframes[3].to_excel(writer, sheet_name="quota errors", index=False)
 
         return Response(
             content=stream.getvalue(),

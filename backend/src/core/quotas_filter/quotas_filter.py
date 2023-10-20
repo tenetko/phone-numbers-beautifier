@@ -1,144 +1,11 @@
 import json
-import re
-from collections import defaultdict
-from typing import Dict, Tuple
+from typing import Tuple
 
 import pandas as pd
-from pandas import DataFrame, Series
-
-from src.core.beautifier.beautifier import PhoneNumbersBeautifier
+from pandas import DataFrame
 
 
 class QuotasFilter:
-    REGION_TYPES = ["Республика", "республика", "область", "край", "АО"]
-    FEDERAL_CITY_NAMES = ["Москва", "Санкт-Петербург"]
-
-    def __init__(self, beautifier: PhoneNumbersBeautifier) -> None:
-        self.beautifier = beautifier
-
-    def make_quotas_dictionary(self, dataframe_with_quotas: DataFrame) -> Dict:
-        quotas = defaultdict(dict)
-
-        for _, row in dataframe_with_quotas.iterrows():
-            raw_region_and_quota_name = str(row["Общая статистика"])
-
-            if "Реклама" in raw_region_and_quota_name:
-                break
-
-            if not self.check_if_raw_region_name_is_valid(raw_region_and_quota_name):
-                continue
-
-            region_name = self.get_region_name(raw_region_and_quota_name)
-            quota_name = self.get_quota_name(raw_region_and_quota_name)
-            quota_value = self.get_quota_value(row)
-            quota_usage = self.get_quota_usage(row)
-            quota_age_from, quota_age_to = self.get_quota_age(quota_name)
-
-            quotas[region_name][quota_name] = {
-                "gender": self.get_quota_gender(quota_name),
-                "age_from": quota_age_from,
-                "age_to": quota_age_to,
-                "balance": self.get_quota_balance(quota_value, quota_usage),
-            }
-
-        return quotas
-
-    def check_if_raw_region_name_is_valid(self, raw_region_name: str) -> bool:
-        if "РЕКРУТ" in raw_region_name:
-            return False
-
-        if not any(region_type in raw_region_name for region_type in self.REGION_TYPES):
-            return False
-
-        return True
-
-    def get_region_name(self, raw_region_name: str) -> str:
-        if any(fed_city_name in raw_region_name for fed_city_name in self.FEDERAL_CITY_NAMES):
-            # "Москва / Московская область" --> "Москва и Московская область"
-            # "Санкт-Петербург/Ленинградская область" --> "Санкт-Петербург и Ленинградская область"
-            splitted_string = raw_region_name.split("/")
-            city = splitted_string[0]
-            region = splitted_string[1].split(">")[0].strip()
-            region_name = f"{city} и {region}"
-
-        else:
-            # "Абакан/Республика Хакасия" --> "Республика Хакасия"
-            splitted_string = raw_region_name.split("/")
-            region_name = splitted_string[1].split(">")[0].strip()
-
-        region_name = self.beautifier.get_refined_quota_region(region_name)
-
-        return region_name
-
-    @staticmethod
-    def get_quota_name(raw_quota_name) -> str:
-        # "Абакан/Республика Хакасия > Женский 16-20" --> "Женский 16-20"
-        if ">" not in raw_quota_name:
-            return "Весь регион"
-
-        splitted_string = raw_quota_name.split(">")
-
-        # We had to hardcode that because we cannot get that changed in any other way
-        if splitted_string[1].strip() == "Tele2":
-            return "Теле-2"
-
-        return splitted_string[1].strip()
-
-    @staticmethod
-    def get_quota_value(row: Series) -> int | str:
-        quota_value = row["Unnamed: 1"]
-        if pd.isna(quota_value):
-            return ""
-
-        return int(quota_value)
-
-    @staticmethod
-    def get_quota_usage(row: Series) -> int:
-        return int(row["Unnamed: 2"])
-
-    @staticmethod
-    def get_quota_balance(quota_value: int, quota_usage: int) -> int | str:
-        if quota_value == "":
-            return ""
-
-        quota_balance = quota_value - quota_usage
-        if quota_balance < 0:
-            return 0
-
-        return quota_balance
-
-    @staticmethod
-    def get_quota_gender(quota_name: str) -> str:
-        if len(quota_name) == 0:
-            return ""
-
-        if "Женский" in quota_name:
-            return "Женский"
-
-        if "Мужской" in quota_name:
-            return "Мужской"
-
-        return ""
-
-    @staticmethod
-    def get_quota_age(quota_name: str) -> Tuple[int, int] | Tuple[str, str]:
-        if "-" not in quota_name or quota_name == "Теле-2":
-            # Билайн, Теле-2
-            return "", ""
-
-        if "+" in quota_name:
-            # Группа Женский 16-20 + 21-35
-            regex = re.compile(
-                r"Группа (?P<gender>[а-яА-Я]*)\s?(?P<first_range_from>\d{1,2})-(?P<first_range_to>\d{1,2}) \+ "
-                r"(?P<second_range_from>\d{1,2})-(?P<second_range_to>\d{1,2})"
-            )
-            result = regex.match(quota_name)
-            return int(result["first_range_from"]), int(result["second_range_to"])
-        else:
-            # Женский 16-20
-            ages = quota_name.split(" ")[1].split("-")
-            return int(ages[0]), int(ages[1])
-
     def filter_phone_numbers(self, phone_numbers: DataFrame, quotas: dict) -> Tuple[DataFrame, DataFrame]:
         rows_with_quotas = []
         rows_with_errors = []
@@ -146,6 +13,32 @@ class QuotasFilter:
         for _, row in phone_numbers.iterrows():
             new_row = dict(row)
             region_quotas = quotas[row["RegionName"]]
+
+            try:
+                row_with_quotas = self.make_new_row_with_quota(new_row, region_quotas)
+                rows_with_quotas.append(row_with_quotas)
+            except KeyError as e:
+                row_json = dict(row)
+                row_json["reason"] = f"Нe найдена квота '{e}'"
+                rows_with_errors.append(row_json)
+
+        return pd.DataFrame(rows_with_quotas), pd.DataFrame(rows_with_errors)
+
+    def filter_reminders(self, phone_numbers: DataFrame, quotas: dict) -> Tuple[DataFrame, DataFrame]:
+        rows_with_quotas = []
+        rows_with_errors = []
+
+        for _, row in phone_numbers.iterrows():
+            new_row = dict(row)
+            new_row["Пол"], new_row["Возраст"] = self.get_age_and_gender_from_reminder(new_row)
+
+            region_name = row["RegionName"]
+            if region_name == "Хабаровский край":
+                # 'Хабаровский край' is the only region name that differs betweek 'край' and 'Край' in different sources
+                # We have to make this condition to keep regions consistent according to our internal standard
+                region_quotas == quotas["Хабаровский Край"]
+            else:
+                region_quotas = quotas[region_name]
 
             try:
                 row_with_quotas = self.make_new_row_with_quota(new_row, region_quotas)
@@ -206,10 +99,16 @@ class QuotasFilter:
 
         return False
 
-    @staticmethod
-    def dump_phone_numbers_to_excel_file(phone_numbers: DataFrame) -> None:
-        phone_numbers.to_excel("phone_numbers_filtered.xlsx", index=False)
+    def get_age_and_gender_from_reminder(self, row: dict) -> Tuple[str, str]:
+        # "513_23_Тюменская область_Мегафон_Ж3645" --> ("Ж", "36")
+        group = row["Group"][-5:]  # Ж3645
+        age = int(group[1:3])
+        gender = group[:1]
+        if gender == "М":
+            gender = "Мужской"
+        elif gender == "Ж":
+            gender = "Женский"
+        else:
+            raise ValueError("Gender is neither М nor Ж")
 
-    def filter_phone_numbers_with_quotas(self, dataframe_to_extend: DataFrame, dataframe_with_quotas: DataFrame):
-        quotas = self.make_quotas_dictionary(dataframe_with_quotas)
-        return self.filter_phone_numbers(dataframe_to_extend, quotas)
+        return gender, age

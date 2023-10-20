@@ -1,7 +1,7 @@
 from pandas import DataFrame, Series
 from pytest import fixture
 
-from src.tests.quotas_filter.mocks import MOCK_DATA
+from src.tests.quotas_parser.mocks import MOCK_DATA
 
 
 @fixture
