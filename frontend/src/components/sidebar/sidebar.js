@@ -10,21 +10,21 @@ export const Sidebar = () => {
     const [isCollapsed, setCollapsed] = useState(true);
 
     return(
-        <Layout.Sider collapsible onCollapse={(collapsed) => setCollapsed(collapsed)}>
+        <Layout.Sider collapsible onCollapse={(collapsed) => setCollapsed(collapsed)}>        
         <Menu theme="dark" mode="inline">
-          <Menu.Item key="tzb">          
+          <Menu.Item key="tzb" style={{textAlign: "right"}}>
             <Link to={TZBPage.route}>
-              <span>TZB</span>
-            </Link>
-          </Menu.Item>            
-  
-          <Menu.Item key="reminders">
-            <Link to={RemindersPage.route}>
-              Reminders
+              <span>TZB</span>            
             </Link>
           </Menu.Item>
-
-          {/* <Menu.Item key="os">
+  
+          <Menu.Item key="reminders" style={{textAlign: "right"}}>
+            <Link to={RemindersPage.route}>
+              Reminders            
+            </Link>
+          </Menu.Item>
+          
+          {/* <Menu.Item key="os" style={{textAlign: "right"}}>
             <Link to="/os">
               OS
             </Link>
