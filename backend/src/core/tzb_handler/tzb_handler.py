@@ -80,6 +80,8 @@ class TZBHandler:
             result_dataframes[0] = quota_application_results[0]
             result_dataframes.append(quota_application_results[1])
 
+            result_dataframes[0].drop(inplace=True, columns=["Пол", "Возраст"])
+
             response = self.export_to_excel_file(result_dataframes)
 
             return response

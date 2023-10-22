@@ -56,6 +56,8 @@ class RemindersHandler:
             reminders_dataframe = pd.read_excel(io.BytesIO(files_dict["reminders"].file.read()))
             quota_application_results = quotas_filter.filter_reminders(reminders_dataframe, quotas_dict)
 
+            quota_application_results[0].drop(inplace=True, columns=["Пол", "Возраст"])
+
             response = self.export_to_excel_file(quota_application_results)
 
             return response
