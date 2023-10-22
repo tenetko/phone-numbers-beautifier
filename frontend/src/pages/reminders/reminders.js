@@ -127,8 +127,18 @@ const Page = () => {
 
   return (
     <Layout>
-      <Title level={1} style={{marginTop: 100, marginBottom: 100, textAlign: "center"}}>Reminders</Title>
+      <Title level={1} style={{marginTop: 50, marginBottom: 50, textAlign: "center"}}>Reminders: apply quotas</Title>
       <Content>
+      <Space style={{align: "center", marginLeft: "60vh", marginRight: "40vh"}}>
+        <Typography.Text >
+          <p>Загрузи следующие файлы в любом порядке:</p>
+          <ul>
+            <li>report_common_statistic_202309281119_265fd58c4014806f.xlsx</li>
+            <li>Alive_TZB.xlsx</li>
+            <li>Reminder_2023424_03458.xlsx</li>
+          </ul>
+        </Typography.Text>        
+        </Space>        
         <Space
           size="large"
           direction="vertical"

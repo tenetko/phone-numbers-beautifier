@@ -50,8 +50,8 @@ const Page = () => {
     setUploading(true);
 
     const url = process.env.NODE_ENV === 'production'
-      ? '/api/excel/handle/'
-      : 'http://127.0.0.1:8000/api/excel/handle/'
+      ? '/api/tzb/handle/'
+      : 'http://127.0.0.1:8000/api/tzb/handle/'
     
     axios
       .post(url, formData, {responseType: "blob"})
@@ -125,8 +125,18 @@ const Page = () => {
 
   return (
     <Layout>
-      <Title level={1} style={{marginTop: 100, marginBottom: 100, textAlign: "center"}}>TZB</Title>
+      <Title level={1} style={{marginTop: 50, marginBottom: 50, textAlign: "center"}}>TZB: apply quotas</Title>
       <Content>
+        <Space style={{align: "center", marginLeft: "60vh", marginRight: "40vh"}}>
+        <Typography.Text >
+          <p>Загрузи следующие файлы в любом порядке:</p>
+          <ul>
+            <li>report_common_statistic_202309281119_265fd58c4014806f.xlsx</li>
+            <li>Alive_TZB.xlsx</li>
+            <li>для 21.09.xlsx</li>
+          </ul>
+        </Typography.Text>        
+        </Space>
         <Space
           size="large"
           direction="vertical"
@@ -135,22 +145,9 @@ const Page = () => {
         >
           <Upload {...props}>
             <Button style={buttonStyle} icon={<UploadOutlined />}>
-              Файл Alive
-            </Button>
-            <br />
-            <Button style={buttonStyle} icon={<UploadOutlined />}>
-              Выгрузка из макроса
-            </Button>
-            <br />
-            <Button style={buttonStyle} icon={<UploadOutlined />}>
-              Исходник
-            </Button>
-            <br />
-            <Button style={buttonStyle} icon={<UploadOutlined />}>
-              Файл с квотами
+              Выбрать файлы
             </Button>
           </Upload>
-          <br />
           <Button
             type="primary"
             onClick={handleUpload}
@@ -159,7 +156,7 @@ const Page = () => {
             style={submitButtonStyle}
             block
           >
-            {uploading ? "Загружаем..." : "Загрузить"}
+            {uploading ? "Загружаем..." : "Загрузить файлы"}
           </Button>
           <Text code style={errorMessageStyle}>{errorMessage}</Text>
         </Space>

@@ -19,7 +19,6 @@ class RemindersHandler:
     def __init__(self, files: list[UploadFile]) -> None:
         self.files = files
         self.config_maker = ConfigMaker()
-        # self.quotas_dict_maker = QuotasParser()
 
     def run(self):
         files_dict = self.get_files_matches(self.files)

@@ -26,8 +26,8 @@ export default function App() {
         </Layout.Content>      
         <Layout.Footer style={footerStyle}>
           <Typography.Text style={{textAlign: "center"}}>
-            ver. 1.0.5 (with better ignore tab, gender and age, quotas filter, error notifications, and reminders)
-          </Typography.Text>        
+            ver. 1.0.6: ignore tab, quotas filter, error notifications, reminders, and simple upload pages)
+          </Typography.Text>     
         </Layout.Footer>
       </Layout>
     </Layout>

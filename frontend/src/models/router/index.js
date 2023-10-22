@@ -9,6 +9,7 @@ export const routes = {
 
 export const router = createHistoryRouter({
   routes: [
+    { path: "/", route: routes.tzb },
     { path: "/tzb", route: routes.tzb },
     { path: "/reminders", route: routes.reminders },
     { path: "/os", route: routes.os },

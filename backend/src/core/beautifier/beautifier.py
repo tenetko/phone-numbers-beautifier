@@ -2,7 +2,7 @@ from io import BytesIO
 from typing import Dict, Tuple
 
 import pandas as pd
-from pandas import DataFrame, Series
+from pandas import DataFrame, ExcelFile, Series
 
 
 class PhoneNumbersBeautifier:
@@ -190,7 +190,7 @@ class PhoneNumbersBeautifier:
     def get_external_id(self, phone_number: str) -> str:
         return phone_number[-10:]
 
-    def get_refined_region(self, row: Series) -> str:
+    def get_refined_region(self, row: Dict) -> str:
         return self.config["regions"][row["region"]]
 
     def get_region_code(self, region: str) -> str:
@@ -205,7 +205,7 @@ class PhoneNumbersBeautifier:
     def get_filial_code(self, region: str) -> int:
         return self.config["filials"][region]
 
-    def get_operator(self, row: Series) -> str:
+    def get_operator(self, row: Dict) -> str:
         return self.config["operators"][row["operator"]]
 
     def get_interval(self, region: str) -> Dict[str, str]:
@@ -264,7 +264,7 @@ class PhoneNumbersBeautifier:
     def get_refined_quota_region(self, region: str) -> str:
         return self.config["regions"][region]
 
-    def run(self, data_file: BytesIO) -> Tuple[DataFrame, DataFrame, DataFrame]:
-        dataframe = pd.read_excel(data_file)
+    def run(self, excel_file: ExcelFile) -> Tuple[DataFrame, DataFrame, DataFrame]:
+        dataframe = pd.read_excel(excel_file, sheet_name="Макрос")
         new_dataset, empty_phone_numbers, ignored_records = self.parse_dataset(dataframe)
         return new_dataset, empty_phone_numbers, ignored_records

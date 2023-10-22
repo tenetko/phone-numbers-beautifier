@@ -33,9 +33,9 @@ class QuotasFilter:
             new_row["Пол"], new_row["Возраст"] = self.get_age_and_gender_from_reminder(new_row)
 
             region_name = row["RegionName"]
+            # 'Хабаровский край' is the only region name that differs between 'край' and 'Край' in different sources.
+            # We have to make this condition to keep regions consistent according to our internal standard.
             if region_name == "Хабаровский край":
-                # 'Хабаровский край' is the only region name that differs betweek 'край' and 'Край' in different sources
-                # We have to make this condition to keep regions consistent according to our internal standard
                 region_quotas == quotas["Хабаровский Край"]
             else:
                 region_quotas = quotas[region_name]
