@@ -30,6 +30,9 @@ class QuotasFilter:
 
         for _, row in phone_numbers.iterrows():
             new_row = dict(row)
+            if pd.isna(row["Group"]):
+                continue
+
             new_row["Пол"], new_row["Возраст"] = self.get_age_and_gender_from_reminder(new_row)
 
             region_name = row["RegionName"]
