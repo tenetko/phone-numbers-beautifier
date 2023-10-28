@@ -129,7 +129,7 @@ const Page = () => {
     <Layout>
       <Title level={1} style={{marginTop: 50, marginBottom: 50, textAlign: "center"}}>Reminders: apply quotas</Title>
       <Content>
-      <Space style={{align: "center", marginLeft: "60vh", marginRight: "40vh"}}>
+      <Space direction="horizontal" style={{width: '100%', justifyContent: 'center'}}>
         <Typography.Text >
           <p>Загрузи следующие файлы в любом порядке:</p>
           <ul>

@@ -3,6 +3,7 @@ import { Layout, Menu } from "antd";
 import { Link } from "atomic-router-react";
 import { routes } from "../../models/router";
 import { TZBPage } from "../../pages/tzb";
+import { OSPage } from "../../pages/os";
 import { RemindersPage } from "../../pages/reminders";
 
 
@@ -24,11 +25,11 @@ export const Sidebar = () => {
             </Link>
           </Menu.Item>
           
-          {/* <Menu.Item key="os" style={{textAlign: "right"}}>
-            <Link to="/os">
+          <Menu.Item key="os" style={{textAlign: "right"}}>
+            <Link to={OSPage.route}>
               OS
             </Link>
-          </Menu.Item> */}
+          </Menu.Item>
         </Menu>
       </Layout.Sider>
     );

@@ -15,7 +15,7 @@ const buttonStyle = {
   width: 300,
   paddingInline: 50,
   lineHeight: "57px",
-  backgroundColor: "#d1b3ff",
+  backgroundColor: "#adddff",
   marginTop: 20,
   marginBottom: 20
 };
@@ -27,7 +27,7 @@ const submitButtonStyle = {
   width: 300,
   paddingInline: 50,
   lineHeight: "57px",
-  backgroundColor: "#39008f",
+  backgroundColor: "#004373",
 };
 
 const errorMessageStyle = {
@@ -50,8 +50,8 @@ const Page = () => {
     setUploading(true);
 
     const url = process.env.NODE_ENV === 'production'
-      ? '/api/tzb/handle/'
-      : 'http://127.0.0.1:8000/api/tzb/handle/'
+      ? '/api/os/handle/'
+      : 'http://127.0.0.1:8000/api/os/handle/'
     
     axios
       .post(url, formData, {responseType: "blob"})
@@ -125,15 +125,15 @@ const Page = () => {
 
   return (
     <Layout>
-      <Title level={1} style={{marginTop: 50, marginBottom: 50, textAlign: "center"}}>TZB: apply quotas</Title>
+      <Title level={1} style={{marginTop: 50, marginBottom: 50, textAlign: "center"}}>OS: format and beautify</Title>
       <Content>
-      <Space direction="horizontal" style={{width: '100%', justifyContent: 'center'}}>
+        <Space direction="horizontal" style={{width: '100%', justifyContent: 'center'}}>
         <Typography.Text >
           <p>Загрузи следующие файлы в любом порядке:</p>
-          <ul>
-            <li>report_common_statistic_202309281119_265fd58c4014806f.xlsx</li>
-            <li>Alive_TZB.xlsx</li>
-            <li>для 21.09.xlsx</li>
+          <ul>            
+            <li>Alive_OS.xlsx</li>
+            <li>OS80_2510.xlsx</li>
+            <br/>
           </ul>
         </Typography.Text>        
         </Space>
@@ -165,4 +165,4 @@ const Page = () => {
   );
 }
 
-export const TZBPage = { Page, route: routes.tzb };
+export const OSPage = { Page, route: routes.os };

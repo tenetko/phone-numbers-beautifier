@@ -2,6 +2,7 @@ import { Layout, Typography } from "antd";
 
 import { TZBPage } from "./pages/tzb";
 import { RemindersPage } from "./pages/reminders";
+import { OSPage } from "./pages/os"
 import { Sidebar } from "./components/sidebar";
 import { Route, RouterProvider } from "atomic-router-react";
 import { router } from "./models/router";
@@ -23,6 +24,7 @@ export default function App() {
         <Layout.Content>          
           <Route route={TZBPage.route} view={TZBPage.Page} />
           <Route route={RemindersPage.route} view={RemindersPage.Page} />
+          <Route route={OSPage.route} view={OSPage.Page} />
         </Layout.Content>      
         <Layout.Footer style={footerStyle}>
           <Typography.Text style={{textAlign: "center"}}>
