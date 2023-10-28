@@ -148,7 +148,7 @@ class TZBHandler:
     def get_result_file_name(self):
         now = datetime.now()
         timestamp = now.strftime("%Y-%m-%d_%H-%M")
-        return f"result-{timestamp}.xlsx"
+        return f"tzb-result-{timestamp}.xlsx"
 
     def make_error_response(self, error_text) -> JSONResponse:
         text = jsonable_encoder(error_text)

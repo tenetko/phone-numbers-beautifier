@@ -148,7 +148,7 @@ def test_make_log_row_for_OS(row_simple):
         "Number": "79001979228",
         "DisplayField2": "Свердловская обл.",
         "oper": 'ООО "ЕКАТЕРИНБУРГ-2000"',
-        "reason": "Такого региона нет на вкладке 'Region-->TZB_Reg_code'",
+        "reason": "Такого региона нет на вкладке 'Region-->OS_Region'",
     }
 
     assert result == expected_result

@@ -1,6 +1,5 @@
 from collections import defaultdict
 from datetime import time
-from io import BytesIO
 from typing import Dict, List
 
 import pandas as pd

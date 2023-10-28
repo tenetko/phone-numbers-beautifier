@@ -34,9 +34,12 @@ class PhoneNumbersBeautifier:
                 continue
 
             if self.check_if_region_is_ignored(tailored_row):
-                tailored_row["reason"] = (
-                    "это регион, у которого в 'Region-->TZB_Reg_code'" "стоит 0 в столбце 'Code_region_TZB'"
-                )
+                if self.project_name == "tzb":
+                    reason = "это регион, у которого в 'Region-->TZB_Reg_code' стоит 0 в столбце 'Code_region_TZB'"
+                elif self.project_name == "os":
+                    reason = "это регион, у которого в 'Region-->OS_Region-->OS_Code' стоит 0 в столбце 'Region_Code'"
+                tailored_row["reason"] = reason
+                ignored_records.append(tailored_row)
                 continue
 
             if self.project_name == "tzb" and not self.check_if_operator_is_allowed_for_TZB(tailored_row):
@@ -93,7 +96,7 @@ class PhoneNumbersBeautifier:
             "Number": parsed_row["phone_number"],
             "DisplayField2": parsed_row["region"],
             "oper": parsed_row["operator"],
-            "reason": "Такого региона нет на вкладке 'Region-->TZB_Reg_code'",
+            "reason": "Такого региона нет на вкладке 'Region-->OS_Region'",
         }
 
     def make_log_row_for_missing_region_for_TZB(self, parsed_row: Dict[str, str]) -> Dict[str, str]:
@@ -265,6 +268,10 @@ class PhoneNumbersBeautifier:
         return self.config["regions"][region]
 
     def run(self, excel_file: ExcelFile) -> Tuple[DataFrame, DataFrame, DataFrame]:
-        dataframe = pd.read_excel(excel_file, sheet_name="Макрос")
+        if self.project_name == "tzb":
+            dataframe = pd.read_excel(excel_file, sheet_name="Макрос")
+        elif self.project_name == "os":
+            dataframe = pd.read_excel(excel_file)
+
         new_dataset, empty_phone_numbers, ignored_records = self.parse_dataset(dataframe)
         return new_dataset, empty_phone_numbers, ignored_records
