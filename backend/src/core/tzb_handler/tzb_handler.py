@@ -29,11 +29,8 @@ class TZBHandler:
             return self.make_error_response(error_description)
 
         try:
-            # Passing bytes to 'read_excel' is deprecated and will be removed in a future version.
-            # To read from a byte string, wrap it in a `BytesIO` object.
             config = self.config_maker.make_config_file(files_dict["beautifier"]["excel_file"])
             beautifier = PhoneNumbersBeautifier(config, self.project_name)
-            extender = GenderAgeExtender()
 
         except ValueError as error:
             error_description = f"File name: {files_dict['beautifier']['file_name']}, ValueError: {str(error)}"
@@ -44,9 +41,12 @@ class TZBHandler:
             return self.make_error_response(error_description)
 
         try:
-            # Make the initial file structured for TZB
-            result_dataframes = beautifier.run(files_dict["source_macros"]["excel_file"])
-            result_dataframes = list(result_dataframes)
+            # Add gender, age, and adjusted region details to the original dataframe
+            extender = GenderAgeExtender()
+            details_dataframe = pd.read_excel(files_dict["source_macros"]["excel_file"], sheet_name="Исходник")
+            macros_dataframe = pd.read_excel(files_dict["source_macros"]["excel_file"], sheet_name="Макрос")
+            extended_dataframe = extender.make_extended_dataframe(macros_dataframe, details_dataframe)
+            print(extended_dataframe.to_string())
 
         except ValueError as error:
             error_description = f"File name: {files_dict['source_macros']['file_name']}, ValueError: {str(error)}"
@@ -57,9 +57,9 @@ class TZBHandler:
             return self.make_error_response(error_description)
 
         try:
-            # Add gender and age details to dataframes[0]
-            details_dataframe = pd.read_excel(files_dict["source_macros"]["excel_file"], sheet_name="Исходник")
-            result_dataframes[0] = extender.make_extended_dataframe(result_dataframes[0], details_dataframe)
+            # Make a dataset structured for TZB
+            result_dataframes = beautifier.run(extended_dataframe)
+            result_dataframes = list(result_dataframes)
 
         except ValueError as error:
             error_description = f"File name: {files_dict['source_macros']['file_name']}, ValueError: {str(error)}"
@@ -95,6 +95,9 @@ class TZBHandler:
             return self.make_error_response(error_description)
 
     def get_files_matches(self, files: list[UploadFile]) -> Dict[str, Dict[str, ExcelFile]]:
+        # Passing bytes to 'read_excel' is deprecated and will be removed in a future version.
+        # To read from a byte string, wrap it in a `BytesIO` object.
+
         files_dict = {}
 
         for file in files:

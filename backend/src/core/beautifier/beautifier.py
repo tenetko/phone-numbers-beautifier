@@ -2,7 +2,7 @@ from io import BytesIO
 from typing import Dict, Tuple
 
 import pandas as pd
-from pandas import DataFrame, ExcelFile, Series
+from pandas import DataFrame, Series
 
 
 class PhoneNumbersBeautifier:
@@ -267,11 +267,6 @@ class PhoneNumbersBeautifier:
     def get_refined_quota_region(self, region: str) -> str:
         return self.config["regions"][region]
 
-    def run(self, excel_file: ExcelFile) -> Tuple[DataFrame, DataFrame, DataFrame]:
-        if self.project_name == "tzb":
-            dataframe = pd.read_excel(excel_file, sheet_name="Макрос")
-        elif self.project_name == "os":
-            dataframe = pd.read_excel(excel_file)
-
+    def run(self, dataframe: DataFrame) -> Tuple[DataFrame, DataFrame, DataFrame]:
         new_dataset, empty_phone_numbers, ignored_records = self.parse_dataset(dataframe)
         return new_dataset, empty_phone_numbers, ignored_records

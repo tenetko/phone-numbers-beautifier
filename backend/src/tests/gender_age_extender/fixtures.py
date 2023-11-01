@@ -8,16 +8,8 @@ def base_dataframe() -> DataFrame:
         [
             {
                 "Number": "79991234567",
-                "RegionName": "Красноярский край",
-                "OperatorName": "Мегафон",
-                "TimeDifference": "UTC +7",
-                "Region": "23",
-                "Operator": "3",
-                "CallIntervalBegin": "06:00:00",
-                "CallIntervalEnd": "18:00:00",
-                "Group": "Красноярский край_Мегафон",
-                "CHECK": "9237847777",
-                "Mark": "23_3",
+                "REGION": "Красноярский край",
+                "OPERATOR": "Мегафон",
             }
         ]
     )

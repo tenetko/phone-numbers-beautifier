@@ -11,6 +11,7 @@ def test_make_details_dict(base_details_dataframe):
             "gender": "Женский",
             "age": "27",
             "email": "00000000-1111-2222-3333-444444444444@i.inb.youthink.dev",
+            "adjusted_region": "Волгоградская область",
         }
     }
 
@@ -23,16 +24,8 @@ def test_make_extended_dataframe(base_dataframe, base_details_dataframe):
         [
             {
                 "Number": "79991234567",
-                "RegionName": "Красноярский край",
-                "OperatorName": "Мегафон",
-                "TimeDifference": "UTC +7",
-                "Region": "23",
-                "Operator": "3",
-                "CallIntervalBegin": "06:00:00",
-                "CallIntervalEnd": "18:00:00",
-                "Group": "Красноярский край_Мегафон",
-                "CHECK": "9237847777",
-                "Mark": "23_3",
+                "REGION": "Волгоградская область",
+                "OPERATOR": "Мегафон",
                 "Пол": "Женский",
                 "Возраст": "27",
                 "Email": "00000000-1111-2222-3333-444444444444@i.inb.youthink.dev",

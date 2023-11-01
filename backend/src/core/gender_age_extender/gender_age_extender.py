@@ -12,11 +12,12 @@ class GenderAgeExtender:
 
         for _, row in dataframe_to_extend.iterrows():
             row_dict = json.loads(row.to_json())
-            details = details_dict[row["Number"]]
+            details = details_dict[row["num"]]
 
             row_dict["Пол"] = details["gender"]
             row_dict["Возраст"] = details["age"]
             row_dict["Email"] = details["email"]
+            row_dict["REGION"] = details["adjusted_region"]
 
             extended_dataset.append(row_dict)
 
@@ -30,6 +31,7 @@ class GenderAgeExtender:
                 "gender": row["Пол"],
                 "age": row["Возраст"],
                 "email": row["Email"],
+                "adjusted_region": row["Регион"],
             }
 
         return result
