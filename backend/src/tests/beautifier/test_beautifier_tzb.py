@@ -12,6 +12,8 @@ def test_parse_row(row_simple):
         "phone_number": "79001979228",
         "region": "Свердловская обл.",
         "operator": 'ООО "ЕКАТЕРИНБУРГ-2000"',
+        "Пол": "Ж",
+        "Возраст": 30,
     }
 
     assert result == expected_result
@@ -179,6 +181,8 @@ def test_make_tailored_row_for_TZB(row_simple):
         "Group": "Свердловская область_Мотив",
         "CHECK": "9001979228",
         "Mark": "12_7",
+        "Пол": "Ж",
+        "Возраст": 30,
     }
 
     assert result == expected_result

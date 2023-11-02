@@ -67,6 +67,8 @@ class PhoneNumbersBeautifier:
             "phone_number": str(row["num"]).replace(" ", ""),
             "region": row["REGION"],
             "operator": row["OPERATOR"],
+            "Пол": row["Пол"],
+            "Возраст": row["Возраст"],
         }
 
     def check_if_region_is_allowed(self, parsed_row: Dict[str, str]) -> bool:
@@ -161,6 +163,8 @@ class PhoneNumbersBeautifier:
             "Group": self.get_tzb_group(region, operator),
             "CHECK": self.get_external_id(phone_number),
             "Mark": self.get_tzb_mark(region_code, operator_code),
+            "Пол": parsed_row["Пол"],
+            "Возраст": parsed_row["Возраст"],
         }
 
     # Try to validate phone number if if can be validated

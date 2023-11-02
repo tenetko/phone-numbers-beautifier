@@ -7,7 +7,7 @@ def base_dataframe() -> DataFrame:
     return DataFrame(
         [
             {
-                "Number": "79991234567",
+                "num": "79991234567",
                 "REGION": "Красноярский край",
                 "OPERATOR": "Мегафон",
             }

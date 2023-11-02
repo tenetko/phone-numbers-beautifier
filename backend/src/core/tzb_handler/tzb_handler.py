@@ -29,6 +29,7 @@ class TZBHandler:
             return self.make_error_response(error_description)
 
         try:
+            # Make a config from the Alive file and make a beautifier instance
             config = self.config_maker.make_config_file(files_dict["beautifier"]["excel_file"])
             beautifier = PhoneNumbersBeautifier(config, self.project_name)
 
@@ -46,7 +47,6 @@ class TZBHandler:
             details_dataframe = pd.read_excel(files_dict["source_macros"]["excel_file"], sheet_name="Исходник")
             macros_dataframe = pd.read_excel(files_dict["source_macros"]["excel_file"], sheet_name="Макрос")
             extended_dataframe = extender.make_extended_dataframe(macros_dataframe, details_dataframe)
-            print(extended_dataframe.to_string())
 
         except ValueError as error:
             error_description = f"File name: {files_dict['source_macros']['file_name']}, ValueError: {str(error)}"

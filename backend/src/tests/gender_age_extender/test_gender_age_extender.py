@@ -23,7 +23,7 @@ def test_make_extended_dataframe(base_dataframe, base_details_dataframe):
     expected_result = DataFrame(
         [
             {
-                "Number": "79991234567",
+                "num": "79991234567",
                 "REGION": "Волгоградская область",
                 "OPERATOR": "Мегафон",
                 "Пол": "Женский",
