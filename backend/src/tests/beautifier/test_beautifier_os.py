@@ -6,14 +6,12 @@ from src.tests.beautifier.fixtures import *
 beautifier = PhoneNumbersBeautifier(MOCK_DATA["config_os"], "os")
 
 
-def test_parse_row(row_simple):
+def test_parse_row_for_os(row_simple):
     result = beautifier.parse_row(row_simple)
     expected_result = {
         "phone_number": "79001979228",
         "region": "Свердловская обл.",
         "operator": 'ООО "ЕКАТЕРИНБУРГ-2000"',
-        "Пол": "Ж",
-        "Возраст": 30,
     }
 
     assert result == expected_result

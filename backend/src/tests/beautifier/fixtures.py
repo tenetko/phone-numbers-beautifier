@@ -13,6 +13,8 @@ def row_simple() -> Series:
             "OPERATOR": 'ООО "ЕКАТЕРИНБУРГ-2000"',
             "Пол": "Ж",
             "Возраст": 30,
+            "iSayMail": "00000000-1111-2222-3333-444444444444@i.inb.youthink.dev",
+            "Reward": 150,
         }
     )
 
@@ -28,6 +30,8 @@ def row_for_nonexistent_region() -> Series:
             "OPERATOR": 'ООО "ЕКАТЕРИНБУРГ-2000"',
             "Пол": "Ж",
             "Возраст": 30,
+            "iSayMail": "00000000-1111-2222-3333-444444444444@i.inb.youthink.dev",
+            "Reward": 150,
         }
     )
 
@@ -43,6 +47,8 @@ def row_for_chukotka() -> Series:
             "OPERATOR": 'ПАО "Вымпел-Коммуникации"',
             "Пол": "Ж",
             "Возраст": 30,
+            "iSayMail": "00000000-1111-2222-3333-444444444444@i.inb.youthink.dev",
+            "Reward": 150,
         }
     )
 
@@ -58,6 +64,8 @@ def row_for_motiv() -> Series:
             "OPERATOR": 'ООО "ЕКАТЕРИНБУРГ-2000"',
             "Пол": "Ж",
             "Возраст": 30,
+            "iSayMail": "00000000-1111-2222-3333-444444444444@i.inb.youthink.dev",
+            "Reward": 150,
         }
     )
 
@@ -73,6 +81,8 @@ def row_for_yota_moscow() -> Series:
             "OPERATOR": 'ООО "Скартел"',
             "Пол": "Ж",
             "Возраст": 30,
+            "iSayMail": "00000000-1111-2222-3333-444444444444@i.inb.youthink.dev",
+            "Reward": 150,
         }
     )
 
@@ -88,6 +98,8 @@ def row_for_yota_krasnodar_kray() -> Series:
             "OPERATOR": 'ООО "Скартел"',
             "Пол": "Ж",
             "Возраст": 30,
+            "iSayMail": "00000000-1111-2222-3333-444444444444@i.inb.youthink.dev",
+            "Reward": 150,
         }
     )
 
@@ -103,5 +115,7 @@ def row_for_sim_telecom() -> Series:
             "OPERATOR": 'ООО "СИМ ТЕЛЕКОМ"',
             "Пол": "Ж",
             "Возраст": 30,
+            "iSayMail": "00000000-1111-2222-3333-444444444444@i.inb.youthink.dev",
+            "Reward": 150,
         }
     )

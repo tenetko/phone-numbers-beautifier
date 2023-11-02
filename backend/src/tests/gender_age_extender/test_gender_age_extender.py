@@ -12,6 +12,7 @@ def test_make_details_dict(base_details_dataframe):
             "age": "27",
             "email": "00000000-1111-2222-3333-444444444444@i.inb.youthink.dev",
             "adjusted_region": "Волгоградская область",
+            "reward": "150",
         }
     }
 
@@ -28,9 +29,9 @@ def test_make_extended_dataframe(base_dataframe, base_details_dataframe):
                 "OPERATOR": "Мегафон",
                 "Пол": "Женский",
                 "Возраст": "27",
-                "Email": "00000000-1111-2222-3333-444444444444@i.inb.youthink.dev",
+                "iSayMail": "00000000-1111-2222-3333-444444444444@i.inb.youthink.dev",
+                "Reward": "150",
             }
         ]
     )
-
     assert result.equals(expected_result)

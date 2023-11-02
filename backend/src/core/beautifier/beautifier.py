@@ -63,12 +63,27 @@ class PhoneNumbersBeautifier:
         return records, empty_phone_numbers, ignored_records
 
     def parse_row(self, row: Series) -> Dict[str, str]:
+        if self.project_name == "os":
+            return self.parse_row_for_os(row)
+        elif self.project_name == "tzb":
+            return self.parse_row_for_tzb(row)
+
+    def parse_row_for_os(self, row: Series) -> Dict[str, str]:
+        return {
+            "phone_number": str(row["num"]).replace(" ", ""),
+            "region": row["REGION"],
+            "operator": row["OPERATOR"],
+        }
+
+    def parse_row_for_tzb(self, row: Series) -> Dict[str, str]:
         return {
             "phone_number": str(row["num"]).replace(" ", ""),
             "region": row["REGION"],
             "operator": row["OPERATOR"],
             "Пол": row["Пол"],
             "Возраст": row["Возраст"],
+            "iSayMail": row["iSayMail"],
+            "Reward": row["Reward"],
         }
 
     def check_if_region_is_allowed(self, parsed_row: Dict[str, str]) -> bool:
@@ -165,6 +180,8 @@ class PhoneNumbersBeautifier:
             "Mark": self.get_tzb_mark(region_code, operator_code),
             "Пол": parsed_row["Пол"],
             "Возраст": parsed_row["Возраст"],
+            "iSayMail": parsed_row["iSayMail"],
+            "Reward": parsed_row["Reward"],
         }
 
     # Try to validate phone number if if can be validated

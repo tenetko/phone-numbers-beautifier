@@ -6,7 +6,7 @@ from src.tests.beautifier.fixtures import *
 beautifier = PhoneNumbersBeautifier(MOCK_DATA["config_tzb"], "tzb")
 
 
-def test_parse_row(row_simple):
+def test_parse_row_for_tzb(row_simple):
     result = beautifier.parse_row(row_simple)
     expected_result = {
         "phone_number": "79001979228",
@@ -14,6 +14,8 @@ def test_parse_row(row_simple):
         "operator": 'ООО "ЕКАТЕРИНБУРГ-2000"',
         "Пол": "Ж",
         "Возраст": 30,
+        "iSayMail": "00000000-1111-2222-3333-444444444444@i.inb.youthink.dev",
+        "Reward": 150,
     }
 
     assert result == expected_result
@@ -183,6 +185,8 @@ def test_make_tailored_row_for_TZB(row_simple):
         "Mark": "12_7",
         "Пол": "Ж",
         "Возраст": 30,
+        "iSayMail": "00000000-1111-2222-3333-444444444444@i.inb.youthink.dev",
+        "Reward": 150,
     }
 
     assert result == expected_result

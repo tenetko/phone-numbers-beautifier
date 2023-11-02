@@ -41,7 +41,8 @@ class OSHandler:
 
         try:
             # Make the initial file structured for TZB
-            result_dataframes = beautifier.run(files_dict["os"]["excel_file"])
+            dataframe = pd.read_excel(files_dict["os"]["excel_file"])
+            result_dataframes = beautifier.run(dataframe)
             result_dataframes = list(result_dataframes)
 
             response = self.export_to_excel_file(result_dataframes)
