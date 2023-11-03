@@ -187,6 +187,7 @@ def test_make_tailored_row_for_TZB(row_simple):
         "Возраст": 30,
         "iSayMail": "00000000-1111-2222-3333-444444444444@i.inb.youthink.dev",
         "Reward": 150,
+        "SOURCE": "3",
     }
 
     assert result == expected_result

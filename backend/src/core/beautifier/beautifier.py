@@ -182,6 +182,7 @@ class PhoneNumbersBeautifier:
             "Возраст": parsed_row["Возраст"],
             "iSayMail": parsed_row["iSayMail"],
             "Reward": parsed_row["Reward"],
+            "SOURCE": "3",  # A static fixed value required by another program for some reason
         }
 
     # Try to validate phone number if if can be validated
