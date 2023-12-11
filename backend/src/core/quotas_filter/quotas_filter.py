@@ -38,6 +38,7 @@ class QuotasFilter:
             region_name = row["RegionName"]
             # 'Хабаровский край' is the only region name that differs between 'край' and 'Край' in different sources.
             # We have to make this condition to keep regions consistent according to our internal standard.
+            region_quotas = {}
             if region_name == "Хабаровский край":
                 region_quotas == quotas["Хабаровский Край"]
             else:
