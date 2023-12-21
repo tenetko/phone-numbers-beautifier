@@ -40,7 +40,7 @@ class QuotasFilter:
             # We have to make this condition to keep regions consistent according to our internal standard.
             region_quotas = {}
             if region_name == "Хабаровский край":
-                region_quotas == quotas["Хабаровский Край"]
+                region_quotas = quotas["Хабаровский Край"]
             else:
                 region_quotas = quotas[region_name]
 
