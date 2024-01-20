@@ -1,9 +1,9 @@
 from mocks import MOCK_DATA
 
-from src.core.beautifier.beautifier import PhoneNumbersBeautifier
+from src.core.beautifier.beautifier_os import PhoneNumbersBeautifierOS
 from src.tests.beautifier.fixtures import *
 
-beautifier = PhoneNumbersBeautifier(MOCK_DATA["config_os"], "os")
+beautifier = PhoneNumbersBeautifierOS(MOCK_DATA["config_os"])
 
 
 def test_parse_row_for_os(row_simple):
@@ -141,9 +141,9 @@ def test_get_operator(row_simple):
     assert result == expected_result
 
 
-def test_make_log_row_for_OS(row_simple):
+def test_make_log_row_for_os(row_simple):
     parsed_row = beautifier.parse_row(row_simple)
-    result = beautifier.make_log_row_for_missing_region_for_OS(parsed_row)
+    result = beautifier.make_log_row_for_missing_region(parsed_row)
     expected_result = {
         "Number": "79001979228",
         "DisplayField2": "Свердловская обл.",
@@ -154,9 +154,9 @@ def test_make_log_row_for_OS(row_simple):
     assert result == expected_result
 
 
-def test_make_tailored_row_for_OS(row_simple):
+def test_make_tailored_row_for_os(row_simple):
     parsed_row = beautifier.parse_row(row_simple)
-    result = beautifier.make_tailored_row_for_OS(parsed_row)
+    result = beautifier.make_tailored_row(parsed_row)
     expected_result = {
         "Number": "79001979228",
         "ВнешнийID": "9001979228",
@@ -174,17 +174,17 @@ def test_make_tailored_row_for_OS(row_simple):
     assert result == expected_result
 
 
-def test_check_if_region_is_ignored_for_OS_for_usual_case(row_simple):
+def test_check_if_region_is_ignored_for_os_for_usual_case(row_simple):
     parsed_row = beautifier.parse_row(row_simple)
-    tailored_row = beautifier.make_tailored_row_for_OS(parsed_row)
-    result = beautifier.check_if_region_is_ignored_for_OS(tailored_row)
+    tailored_row = beautifier.make_tailored_row(parsed_row)
+    result = beautifier.check_if_region_is_ignored(tailored_row)
 
     assert result == False
 
 
-def test_check_if_region_is_ignored_for_OS_for_chukotka(row_for_chukotka):
+def test_check_if_region_is_ignored_for_os_for_chukotka(row_for_chukotka):
     parsed_row = beautifier.parse_row(row_for_chukotka)
-    tailored_row = beautifier.make_tailored_row_for_OS(parsed_row)
-    result = beautifier.check_if_region_is_ignored_for_OS(tailored_row)
+    tailored_row = beautifier.make_tailored_row(parsed_row)
+    result = beautifier.check_if_region_is_ignored(tailored_row)
 
     assert result == True

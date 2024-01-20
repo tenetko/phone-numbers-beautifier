@@ -8,7 +8,7 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from pandas import DataFrame, ExcelFile
 
-from src.core.beautifier.beautifier import PhoneNumbersBeautifier
+from src.core.beautifier.beautifier_os import PhoneNumbersBeautifierOS
 from src.core.config_maker.os_config_maker import ConfigMaker
 
 
@@ -29,7 +29,7 @@ class OSHandler:
             # Passing bytes to 'read_excel' is deprecated and will be removed in a future version.
             # To read from a byte string, wrap it in a `BytesIO` object.
             config = self.config_maker.make_config_file(files_dict["beautifier"]["excel_file"])
-            beautifier = PhoneNumbersBeautifier(config, self.project_name)
+            beautifier = PhoneNumbersBeautifierOS(config, self.project_name)
 
         except ValueError as error:
             error_description = f"File name: {files_dict['beautifier']['file_name']}, ValueError: {str(error)}"

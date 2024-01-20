@@ -2,14 +2,14 @@ import json
 
 import pandas as pd
 
-from src.core.beautifier.beautifier import PhoneNumbersBeautifier
+from src.core.beautifier.beautifier_tzb import PhoneNumbersBeautifierTZB
 from src.core.quotas_filter.quotas_filter import QuotasFilter
 from src.core.quotas_parser.quotas_parser import QuotasParser
 from src.tests.beautifier.mocks import MOCK_DATA as BEAUTIFIER_MOCK_DATA
 from src.tests.quotas_parser.fixtures import quotas_dataframe
 
 quotas_filter = QuotasFilter()
-beautifier = PhoneNumbersBeautifier(BEAUTIFIER_MOCK_DATA["config_tzb"], "tzb")
+beautifier = PhoneNumbersBeautifierTZB(BEAUTIFIER_MOCK_DATA["config_tzb"])
 quotas_parser = QuotasParser(beautifier)
 
 

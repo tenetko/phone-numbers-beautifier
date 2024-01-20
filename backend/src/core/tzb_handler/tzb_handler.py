@@ -8,7 +8,7 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from pandas import DataFrame, ExcelFile
 
-from src.core.beautifier.beautifier import PhoneNumbersBeautifier
+from src.core.beautifier.beautifier_tzb import PhoneNumbersBeautifierTZB
 from src.core.config_maker.tzb_config_maker import ConfigMaker
 from src.core.gender_age_extender.gender_age_extender import GenderAgeExtender
 from src.core.quotas_filter.quotas_filter import QuotasFilter
@@ -31,7 +31,7 @@ class TZBHandler:
         try:
             # Make a config from the Alive file and make a beautifier instance
             config = self.config_maker.make_config_file(files_dict["beautifier"]["excel_file"])
-            beautifier = PhoneNumbersBeautifier(config, self.project_name)
+            beautifier = PhoneNumbersBeautifierTZB(config)
 
         except ValueError as error:
             error_description = f"File name: {files_dict['beautifier']['file_name']}, ValueError: {str(error)}"

@@ -1,9 +1,9 @@
 from mocks import MOCK_DATA
 
-from src.core.beautifier.beautifier import PhoneNumbersBeautifier
+from src.core.beautifier.beautifier_tzb import PhoneNumbersBeautifierTZB
 from src.tests.beautifier.fixtures import *
 
-beautifier = PhoneNumbersBeautifier(MOCK_DATA["config_tzb"], "tzb")
+beautifier = PhoneNumbersBeautifierTZB(MOCK_DATA["config_tzb"])
 
 
 def test_parse_row_for_tzb(row_simple):
@@ -155,9 +155,9 @@ def test_get_tzb_mark(row_simple):
     assert result == expected_result
 
 
-def test_make_log_row_for_TZB(row_simple):
+def test_make_log_row_for_tzb(row_simple):
     parsed_row = beautifier.parse_row(row_simple)
-    result = beautifier.make_log_row_for_missing_region_for_TZB(parsed_row)
+    result = beautifier.make_log_row_for_missing_region(parsed_row)
     expected_result = {
         "Number": "79001979228",
         "RegionName": "Свердловская обл.",
@@ -168,9 +168,9 @@ def test_make_log_row_for_TZB(row_simple):
     assert result == expected_result
 
 
-def test_make_tailored_row_for_TZB(row_simple):
+def test_make_tailored_row_for_tzb(row_simple):
     parsed_row = beautifier.parse_row(row_simple)
-    result = beautifier.make_tailored_row_for_TZB(parsed_row)
+    result = beautifier.make_tailored_row(parsed_row)
     expected_result = {
         "Number": "79001979228",
         "RegionName": "Свердловская область",
@@ -193,37 +193,37 @@ def test_make_tailored_row_for_TZB(row_simple):
     assert result == expected_result
 
 
-def test_check_if_operator_is_allowed_for_TZB_for_yota_moscow(row_for_yota_moscow):
+def test_check_if_operator_is_allowed_for_tzb_for_yota_moscow(row_for_yota_moscow):
     parsed_row = beautifier.parse_row(row_for_yota_moscow)
-    tailored_row = beautifier.make_tailored_row_for_TZB(parsed_row)
-    result = beautifier.check_if_operator_is_allowed_for_TZB(tailored_row)
+    tailored_row = beautifier.make_tailored_row(parsed_row)
+    result = beautifier.check_if_operator_is_allowed(tailored_row)
     expected_result = True
 
     assert result == expected_result
 
 
-def test_check_if_operator_is_allowed_for_TZB_for_yota_krasnodarskiy_kray(row_for_yota_krasnodar_kray):
+def test_check_if_operator_is_allowed_for_tzb_for_yota_krasnodarskiy_kray(row_for_yota_krasnodar_kray):
     parsed_row = beautifier.parse_row(row_for_yota_krasnodar_kray)
-    tailored_row = beautifier.make_tailored_row_for_TZB(parsed_row)
-    result = beautifier.check_if_operator_is_allowed_for_TZB(tailored_row)
+    tailored_row = beautifier.make_tailored_row(parsed_row)
+    result = beautifier.check_if_operator_is_allowed(tailored_row)
     expected_result = False
 
     assert result == expected_result
 
 
-def test_check_if_operator_is_other_for_TZB_for_yota_moscow(row_for_yota_moscow):
+def test_check_if_operator_is_other_for_tzb_for_yota_moscow(row_for_yota_moscow):
     parsed_row = beautifier.parse_row(row_for_yota_moscow)
-    tailored_row = beautifier.make_tailored_row_for_TZB(parsed_row)
-    result = beautifier.check_if_operator_is_other_for_TZB(tailored_row)
+    tailored_row = beautifier.make_tailored_row(parsed_row)
+    result = beautifier.check_if_operator_is_other(tailored_row)
     expected_result = False
 
     assert result == expected_result
 
 
-def test_check_if_operator_is_other_for_TZB_for_sim_telecom(row_for_sim_telecom):
+def test_check_if_operator_is_other_for_tzb_for_sim_telecom(row_for_sim_telecom):
     parsed_row = beautifier.parse_row(row_for_sim_telecom)
-    tailored_row = beautifier.make_tailored_row_for_TZB(parsed_row)
-    result = beautifier.check_if_operator_is_other_for_TZB(tailored_row)
+    tailored_row = beautifier.make_tailored_row(parsed_row)
+    result = beautifier.check_if_operator_is_other(tailored_row)
     expected_result = True
 
     assert result == expected_result
