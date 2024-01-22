@@ -9,7 +9,7 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from pandas import DataFrame
 
-from src.core.beautifier.beautifier import PhoneNumbersBeautifier
+from src.core.beautifier.beautifier_tzb import PhoneNumbersBeautifierTZB
 from src.core.config_maker.tzb_config_maker import ConfigMaker
 from src.core.quotas_filter.quotas_filter import QuotasFilter
 from src.core.quotas_parser.quotas_parser import QuotasParser
@@ -26,7 +26,7 @@ class RemindersHandler:
         try:
             # Try to parse the 'Alive' file
             config = self.config_maker.make_config_file(io.BytesIO(files_dict["beautifier"].file.read()))
-            beautifier = PhoneNumbersBeautifier(config, "tzb")
+            beautifier = PhoneNumbersBeautifierTZB(config)
 
         except ValueError as error:
             error_description = f"File name: {files_dict['beautifier'].filename}, ValueError: {str(error)}"
