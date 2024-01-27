@@ -24,6 +24,7 @@ class TZBHandler:
     def run(self):
         try:
             files_dict = self.get_files_matches(self.files)
+            print(files_dict)
         except ValueError as error:
             error_description = f"{error}"
             return self.make_error_response(error_description)
@@ -115,18 +116,11 @@ class TZBHandler:
                 }
                 continue
 
-            excel_file = pd.ExcelFile(io.BytesIO(file.file.read()))
-            if "Исходник" in excel_file.sheet_names and "Макрос" in excel_file.sheet_names:
-                files_dict["source_macros"] = {
+            elif "iSay" == file.filename[0:4]:
+                files_dict["template"] = {
                     "file_name": file.filename,
-                    "excel_file": excel_file,
+                    "excel_file": pd.ExcelFile(io.BytesIO(file.file.read())),
                 }
-            elif "Исходник" in excel_file.sheet_names and "Макрос" not in excel_file.sheet_names:
-                raise ValueError(f"В файле {file.filename} не найдён лист 'Макрос'")
-            elif "Исходник" not in excel_file.sheet_names and "Макрос" in excel_file.sheet_names:
-                raise ValueError(f"В файле {file.filename} не найдён лист 'Исходник'")
-            else:
-                raise ValueError(f"В файле {file.filename} не найдены листы 'Исходник' и 'Макрос'")
 
         return files_dict
 

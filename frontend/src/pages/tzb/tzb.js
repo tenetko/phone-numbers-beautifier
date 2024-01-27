@@ -133,7 +133,8 @@ const Page = () => {
           <ul>
             <li>report_common_statistic_202309281119_265fd58c4014806f.xlsx</li>
             <li>Alive_TZB.xlsx</li>
-            <li>для 21.09.xlsx</li>
+            <li>iSay_template.xlsx</li>
+            <li>ПРОВЕРКА_25!.xlsx</li>
           </ul>
         </Typography.Text>        
         </Space>
