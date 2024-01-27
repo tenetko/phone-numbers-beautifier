@@ -1,4 +1,4 @@
-import { Button, Layout, message, Space, Typography, Upload } from "antd";
+import { Button, DatePicker, Form, Layout, message, Space, Typography, Upload } from "antd";
 import axios from "axios";
 import { useState } from "react";
 import { routes } from "../../models/router";
@@ -7,6 +7,7 @@ import "antd/dist/reset.css";
 
 const { Content } = Layout;
 const { Text, Title } = Typography;
+const { RangePicker } = DatePicker;
 
 const buttonStyle = {
   textAlign: "center",
@@ -40,21 +41,24 @@ const Page = () => {
   const [uploading, setUploading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const handleUpload = () => {
-    const formData = new FormData();
-
-    fileList.forEach((file) => {
-      formData.append("files", file);
-    });
+  const handleSubmit = (values) => {
+    console.log(values)
 
     setUploading(true);
 
     const url = process.env.NODE_ENV === 'production'
       ? '/api/tzb/handle/'
       : 'http://127.0.0.1:8000/api/tzb/handle/'
-    
-    axios
-      .post(url, formData, {responseType: "blob"})
+
+      const data = {
+        values: values
+      }
+      console.log("---")
+      console.log(data)
+      console.log("---")
+
+      axios
+      .post(url, data, {responseType: "blob"})
 
       .then((response) => {
         setFileList([]);
@@ -105,23 +109,38 @@ const Page = () => {
       .finally((res) => {
         setUploading(false);
       });
+  };      
+
+  const normFile = (e) => {
+    console.log('Upload event:', e)
+    if (Array.isArray(e)) {
+      return e;
+    }
+    return e?.fileList;
   };
 
-  const props = {
-    onRemove: (file) => {
-      const index = fileList.indexOf(file);
-      const newFileList = fileList.slice();
-      newFileList.splice(index, 1);
-      setFileList(newFileList);
-    },
+  // const handleUpload = () => {
+  //   const formData = new FormData();
 
-    beforeUpload: (file) => {
-      setFileList([...fileList, file]);
+  //   fileList.forEach((file) => {
+  //     formData.append("files", file);
+  //   });
 
-      return false;
-    },
-    fileList,
-  };
+  // const props = {
+  //   onRemove: (file) => {
+  //     const index = fileList.indexOf(file);
+  //     const newFileList = fileList.slice();
+  //     newFileList.splice(index, 1);
+  //     setFileList(newFileList);
+  //   },
+
+  //   beforeUpload: (file) => {
+  //     setFileList([...fileList, file]);
+
+  //     return false;
+  //   },
+  //   fileList,
+  // };
 
   return (
     <Layout>
@@ -144,21 +163,30 @@ const Page = () => {
           align="center"
           style={{ width: "100%" }}
         >
-          <Upload {...props}>
-            <Button style={buttonStyle} icon={<UploadOutlined />}>
-              Выбрать файлы
-            </Button>
-          </Upload>
-          <Button
-            type="primary"
-            onClick={handleUpload}
-            disabled={fileList.length === 0}
-            loading={uploading}
-            style={submitButtonStyle}
-            block
-          >
-            {uploading ? "Загружаем..." : "Загрузить файлы"}
-          </Button>
+          <Form onFinish={handleSubmit}>
+            <Form.Item name="Source1DateRange">
+              <RangePicker />
+            </Form.Item>
+            <Form.Item name="FileUpload">
+              <Upload valuePropName="fileList" getValueFromEvent={normFile}>
+                <Button style={buttonStyle} icon={<UploadOutlined />}>
+                  Upload files
+                </Button>
+              </Upload>
+            </Form.Item>
+            <Form.Item>
+              <Button name="Files" 
+                type="primary"
+                htmlType="submit"
+                style={submitButtonStyle}
+                // disabled={fileList.length === 0}
+                loading={uploading}
+                block
+              >
+                {uploading ? "Uploading..." : "Submit"}
+              </Button>
+            </Form.Item>
+          </Form>
           <Text code style={errorMessageStyle}>{errorMessage}</Text>
         </Space>
       </Content>
