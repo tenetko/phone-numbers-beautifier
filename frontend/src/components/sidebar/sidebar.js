@@ -3,6 +3,7 @@ import { Layout, Menu } from "antd";
 import { Link } from "atomic-router-react";
 import { routes } from "../../models/router";
 import { TZBPage } from "../../pages/tzb";
+import { TZBTemplatePage } from "../../pages/tzbtemplate";
 import { OSPage } from "../../pages/os";
 import { RemindersPage } from "../../pages/reminders";
 
@@ -19,6 +20,12 @@ export const Sidebar = () => {
             </Link>
           </Menu.Item>
   
+          <Menu.Item key="tzbtemplate" style={{textAlign: "right"}}>
+            <Link to={TZBTemplatePage.route}>
+              <span>TZB via templates</span>            
+            </Link>
+          </Menu.Item>
+
           <Menu.Item key="reminders" style={{textAlign: "right"}}>
             <Link to={RemindersPage.route}>
               Reminders            

@@ -1,6 +1,7 @@
 import { Layout, Typography } from "antd";
 
 import { TZBPage } from "./pages/tzb";
+import { TZBTemplatePage } from "./pages/tzbtemplate";
 import { RemindersPage } from "./pages/reminders";
 import { OSPage } from "./pages/os"
 import { Sidebar } from "./components/sidebar";
@@ -23,12 +24,13 @@ export default function App() {
       <Layout>
         <Layout.Content>          
           <Route route={TZBPage.route} view={TZBPage.Page} />
+          <Route route={TZBTemplatePage.route} view={TZBTemplatePage.Page} />
           <Route route={RemindersPage.route} view={RemindersPage.Page} />
           <Route route={OSPage.route} view={OSPage.Page} />
         </Layout.Content>      
         <Layout.Footer style={footerStyle}>
           <Typography.Text style={{textAlign: "center"}}>
-            ver. 1.0.6: ignore tab, quotas filter, error notifications, reminders, and simple upload pages)
+            ver. 1.0.7: ignore tab, quotas filter, error notifications, reminders, simple upload pages, and TZB templates)
           </Typography.Text>     
         </Layout.Footer>
       </Layout>

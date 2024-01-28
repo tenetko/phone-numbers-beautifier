@@ -1,4 +1,4 @@
-import { Button, Layout, message, Space, Typography, Upload } from "antd";
+import { Button, DatePicker, Form, Layout, message, Space, Typography, Upload } from "antd";
 import axios from "axios";
 import { useState } from "react";
 import { routes } from "../../models/router";
@@ -7,6 +7,7 @@ import "antd/dist/reset.css";
 
 const { Content } = Layout;
 const { Text, Title } = Typography;
+const { RangePicker } = DatePicker;
 
 const buttonStyle = {
   textAlign: "center",
@@ -15,7 +16,7 @@ const buttonStyle = {
   width: 300,
   paddingInline: 50,
   lineHeight: "57px",
-  backgroundColor: "#d1b3ff",
+  backgroundColor: "#ffab96",
   marginTop: 20,
   marginBottom: 20
 };
@@ -27,7 +28,7 @@ const submitButtonStyle = {
   width: 300,
   paddingInline: 50,
   lineHeight: "57px",
-  backgroundColor: "#39008f",
+  backgroundColor: "#a62100",
 };
 
 const errorMessageStyle = {
@@ -40,21 +41,29 @@ const Page = () => {
   const [uploading, setUploading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const handleUpload = () => {
-    const formData = new FormData();
-
-    fileList.forEach((file) => {
-      formData.append("files", file);
-    });
+  const handleSubmit = (values) => {
 
     setUploading(true);
 
     const url = process.env.NODE_ENV === 'production'
-      ? '/api/tzb/handle/'
-      : 'http://127.0.0.1:8000/api/tzb/handle/'
-    
-    axios
-      .post(url, formData, {responseType: "blob"})
+      ? '/api/tzb_template/handle/'
+      : 'http://127.0.0.1:8000/api/tzb_template/handle/'
+
+      const data = new FormData();
+      data.append('source_1_date_0', String(values.source_1_date_range[0]));
+      data.append('source_1_date_1', String(values.source_1_date_range[1]));
+      data.append('source_2_date_0', String(values.source_2_date_range[0]));
+      data.append('source_2_date_1', String(values.source_2_date_range[1]));
+      fileList.forEach((file) => {
+        data.append("files", file);
+      });      
+
+      for (const entry of data.entries()) {
+        console.log(entry);
+      }
+
+      axios
+      .post(url, data, {responseType: "blob"})
 
       .then((response) => {
         setFileList([]);
@@ -105,6 +114,13 @@ const Page = () => {
       .finally((res) => {
         setUploading(false);
       });
+  };      
+
+  const normFile = (e) => {    
+    if (Array.isArray(e)) {
+      return e;
+    }
+    return e?.fileList;
   };
 
   const props = {
@@ -125,15 +141,16 @@ const Page = () => {
 
   return (
     <Layout>
-      <Title level={1} style={{marginTop: 50, marginBottom: 50, textAlign: "center"}}>TZB: apply quotas</Title>
+      <Title level={1} style={{marginTop: 50, marginBottom: 50, textAlign: "center"}}>TZB via templates: apply quotas</Title>
       <Content>
       <Space direction="horizontal" style={{width: '100%', justifyContent: 'center'}}>
         <Typography.Text >
-          <p>Загрузи следующие файлы в любом порядке:</p>
+          <p>Upload the following files in any order:</p>
           <ul>
             <li>report_common_statistic_202309281119_265fd58c4014806f.xlsx</li>
             <li>Alive_TZB.xlsx</li>
-            <li>для 21.09.xlsx</li>
+            <li>iSay_template.xlsx</li>
+            <li>ПРОВЕРКА_25!.xlsx</li>
           </ul>
         </Typography.Text>        
         </Space>
@@ -143,21 +160,39 @@ const Page = () => {
           align="center"
           style={{ width: "100%" }}
         >
-          <Upload {...props}>
-            <Button style={buttonStyle} icon={<UploadOutlined />}>
-              Выбрать файлы
-            </Button>
-          </Upload>
-          <Button
-            type="primary"
-            onClick={handleUpload}
-            disabled={fileList.length === 0}
-            loading={uploading}
-            style={submitButtonStyle}
-            block
-          >
-            {uploading ? "Загружаем..." : "Загрузить файлы"}
-          </Button>
+          <Form onFinish={handleSubmit}>
+
+            <Typography.Text >Select date range for Source 1:</Typography.Text>
+            <Form.Item name="source_1_date_range">
+              <RangePicker />
+            </Form.Item>
+
+            <Typography.Text >Select date range for Source 2:</Typography.Text>
+            <Form.Item name="source_2_date_range">
+              <RangePicker />
+            </Form.Item>            
+
+            <Form.Item name="files">
+              <Upload {...props} valuePropName="fileList" getValueFromEvent={normFile}>
+                <Button style={buttonStyle} icon={<UploadOutlined />}>
+                  Upload files
+                </Button>
+              </Upload>
+            </Form.Item>
+
+            <Form.Item>
+              <Button
+                type="primary"
+                htmlType="submit"
+                style={submitButtonStyle}
+                // disabled={fileList.length === 0}
+                loading={uploading}
+                block
+              >
+                {uploading ? "Uploading..." : "Submit"}
+              </Button>
+            </Form.Item>
+          </Form>
           <Text code style={errorMessageStyle}>{errorMessage}</Text>
         </Space>
       </Content>
@@ -165,4 +200,4 @@ const Page = () => {
   );
 }
 
-export const TZBPage = { Page, route: routes.tzb };
+export const TZBTemplatePage = { Page, route: routes.tzbtemplate };
