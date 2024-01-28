@@ -42,7 +42,6 @@ const Page = () => {
   const [errorMessage, setErrorMessage] = useState('');
 
   const handleSubmit = (values) => {
-    console.log(values)
 
     setUploading(true);
 
@@ -50,12 +49,18 @@ const Page = () => {
       ? '/api/tzb/handle/'
       : 'http://127.0.0.1:8000/api/tzb/handle/'
 
-      const data = {
-        values: values
+      const data = new FormData();
+      data.append('source_1_date_0', String(values.source_1_date_range[0]));
+      data.append('source_1_date_1', String(values.source_1_date_range[1]));
+      data.append('source_2_date_0', String(values.source_2_date_range[0]));
+      data.append('source_2_date_1', String(values.source_2_date_range[1]));
+      fileList.forEach((file) => {
+        data.append("files", file);
+      });      
+
+      for (const entry of data.entries()) {
+        console.log(entry);
       }
-      console.log("---")
-      console.log(data)
-      console.log("---")
 
       axios
       .post(url, data, {responseType: "blob"})
@@ -111,36 +116,28 @@ const Page = () => {
       });
   };      
 
-  const normFile = (e) => {
-    console.log('Upload event:', e)
+  const normFile = (e) => {    
     if (Array.isArray(e)) {
       return e;
     }
     return e?.fileList;
   };
 
-  // const handleUpload = () => {
-  //   const formData = new FormData();
+  const props = {
+    onRemove: (file) => {
+      const index = fileList.indexOf(file);
+      const newFileList = fileList.slice();
+      newFileList.splice(index, 1);
+      setFileList(newFileList);
+    },
 
-  //   fileList.forEach((file) => {
-  //     formData.append("files", file);
-  //   });
+    beforeUpload: (file) => {
+      setFileList([...fileList, file]);
 
-  // const props = {
-  //   onRemove: (file) => {
-  //     const index = fileList.indexOf(file);
-  //     const newFileList = fileList.slice();
-  //     newFileList.splice(index, 1);
-  //     setFileList(newFileList);
-  //   },
-
-  //   beforeUpload: (file) => {
-  //     setFileList([...fileList, file]);
-
-  //     return false;
-  //   },
-  //   fileList,
-  // };
+      return false;
+    },
+    fileList,
+  };
 
   return (
     <Layout>
@@ -164,18 +161,25 @@ const Page = () => {
           style={{ width: "100%" }}
         >
           <Form onFinish={handleSubmit}>
-            <Form.Item name="Source1DateRange">
+
+            <Form.Item name="source_1_date_range">
               <RangePicker />
             </Form.Item>
-            <Form.Item name="FileUpload">
-              <Upload valuePropName="fileList" getValueFromEvent={normFile}>
+
+            <Form.Item name="source_2_date_range">
+              <RangePicker />
+            </Form.Item>            
+
+            <Form.Item name="files">
+              <Upload {...props} valuePropName="fileList" getValueFromEvent={normFile}>
                 <Button style={buttonStyle} icon={<UploadOutlined />}>
                   Upload files
                 </Button>
               </Upload>
             </Form.Item>
+
             <Form.Item>
-              <Button name="Files" 
+              <Button
                 type="primary"
                 htmlType="submit"
                 style={submitButtonStyle}

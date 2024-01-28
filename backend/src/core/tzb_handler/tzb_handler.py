@@ -10,21 +10,21 @@ from pandas import DataFrame, ExcelFile
 
 from src.core.beautifier.beautifier_tzb import PhoneNumbersBeautifierTZB
 from src.core.config_maker.tzb_config_maker import ConfigMaker
+from src.core.tzb_template_parser.tzb_template_parser import TZBTemplateParser
 from src.core.gender_age_extender.gender_age_extender import GenderAgeExtender
 from src.core.quotas_filter.quotas_filter import QuotasFilter
 from src.core.quotas_parser.quotas_parser import QuotasParser
 
 
 class TZBHandler:
-    def __init__(self, files: list[UploadFile], project_name: str) -> None:
+    def __init__(self, dates: Dict, files: list[UploadFile]) -> None:
         self.files = files
-        self.project_name = project_name
+        self.dates = dates
         self.config_maker = ConfigMaker()
 
     def run(self):
         try:
             files_dict = self.get_files_matches(self.files)
-            print(files_dict)
         except ValueError as error:
             error_description = f"{error}"
             return self.make_error_response(error_description)
@@ -43,57 +43,66 @@ class TZBHandler:
             return self.make_error_response(error_description)
 
         try:
-            # Add gender, age, and adjusted region details to the original dataframe
-            extender = GenderAgeExtender()
-            details_dataframe = pd.read_excel(files_dict["source_macros"]["excel_file"], sheet_name="Исходник")
-            macros_dataframe = pd.read_excel(files_dict["source_macros"]["excel_file"], sheet_name="Макрос")
-            extended_dataframe = extender.make_extended_dataframe(macros_dataframe, details_dataframe)
+            # Create a source dataframe from the template
+            template_parser = TZBTemplateParser()
+            source_dataframe = template_parser.make_new_source_dataframe(
+                self.dates, files_dict["template"]["excel_file"]
+            )
+        except:
+            pass
 
-        except ValueError as error:
-            error_description = f"File name: {files_dict['source_macros']['file_name']}, ValueError: {str(error)}"
-            return self.make_error_response(error_description)
+        # try:
+        #     # Add gender, age, and adjusted region details to the original dataframe
+        #     extender = GenderAgeExtender()
+        #     details_dataframe = pd.read_excel(files_dict["source_macros"]["excel_file"], sheet_name="Исходник")
+        #     macros_dataframe = pd.read_excel(files_dict["source_macros"]["excel_file"], sheet_name="Макрос")
+        #     extended_dataframe = extender.make_extended_dataframe(macros_dataframe, details_dataframe)
+        #
+        # except ValueError as error:
+        #     error_description = f"File name: {files_dict['source_macros']['file_name']}, ValueError: {str(error)}"
+        #     return self.make_error_response(error_description)
+        #
+        # except KeyError as error:
+        #     error_description = f"File name: {files_dict['source_macros']['file_name']}, KeyError: {str(error)}"
+        #     return self.make_error_response(error_description)
 
-        except KeyError as error:
-            error_description = f"File name: {files_dict['source_macros']['file_name']}, KeyError: {str(error)}"
-            return self.make_error_response(error_description)
-
-        try:
-            # Make a dataset structured for TZB
-            result_dataframes = beautifier.run(extended_dataframe)
-            result_dataframes = list(result_dataframes)
-
-        except ValueError as error:
-            error_description = f"File name: {files_dict['source_macros']['file_name']}, ValueError: {str(error)}"
-            return self.make_error_response(error_description)
-
-        except KeyError as error:
-            error_description = f"File name: {files_dict['source_macros']['file_name']}, KeyError: {str(error)}"
-            return self.make_error_response(error_description)
-
-        try:
-            # Add isCallable flag to dataframes[0]
-            quotas_dataframe = pd.read_excel(files_dict["quotas"]["excel_file"])
-            quotas_parser = QuotasParser(beautifier)
-            quotas_filter = QuotasFilter()
-            quotas_dict = quotas_parser.make_quotas_dictionary(quotas_dataframe)
-            quota_application_results = quotas_filter.filter_phone_numbers(result_dataframes[0], quotas_dict)
-
-            result_dataframes[0] = quota_application_results[0]
-            result_dataframes.append(quota_application_results[1])
-
-            result_dataframes[0].drop(inplace=True, columns=["Пол", "Возраст"])
-
-            response = self.export_to_excel_file(result_dataframes)
-
-            return response
-
-        except ValueError as error:
-            error_description = f"File name: {files_dict['quotas']['file_name']}, ValueError: {str(error)}"
-            return self.make_error_response(error_description)
-
-        except KeyError as error:
-            error_description = f"File name: {files_dict['quotas']['file_name']}, KeyError: {str(error)}"
-            return self.make_error_response(error_description)
+        # try:
+        #     # Make a dataset structured for TZB
+        #     result_dataframes = beautifier.run(extended_dataframe)
+        #     result_dataframes = list(result_dataframes)
+        #
+        # except ValueError as error:
+        #     error_description = f"File name: {files_dict['source_macros']['file_name']}, ValueError: {str(error)}"
+        #     return self.make_error_response(error_description)
+        #
+        # except KeyError as error:
+        #     error_description = f"File name: {files_dict['source_macros']['file_name']}, KeyError: {str(error)}"
+        #     return self.make_error_response(error_description)
+        #
+        # try:
+        #     # Add isCallable flag to dataframes[0]
+        #     quotas_dataframe = pd.read_excel(files_dict["quotas"]["excel_file"])
+        #     quotas_parser = QuotasParser(beautifier)
+        #     quotas_filter = QuotasFilter()
+        #     quotas_dict = quotas_parser.make_quotas_dictionary(quotas_dataframe)
+        #     quota_application_results = quotas_filter.filter_phone_numbers(result_dataframes[0], quotas_dict)
+        #
+        #     result_dataframes[0] = quota_application_results[0]
+        #     result_dataframes.append(quota_application_results[1])
+        #
+        #     result_dataframes[0].drop(inplace=True, columns=["Пол", "Возраст"])
+        #
+        #     response = self.export_to_excel_file(result_dataframes)
+        #
+        #     return response
+        #
+        # except ValueError as error:
+        #     error_description = f"File name: {files_dict['quotas']['file_name']}, ValueError: {str(error)}"
+        #     return self.make_error_response(error_description)
+        #
+        # except KeyError as error:
+        #     error_description = f"File name: {files_dict['quotas']['file_name']}, KeyError: {str(error)}"
+        #     return self.make_error_response(error_description)
 
     def get_files_matches(self, files: list[UploadFile]) -> Dict[str, Dict[str, ExcelFile]]:
         # Passing bytes to 'read_excel' is deprecated and will be removed in a future version.
@@ -118,6 +127,12 @@ class TZBHandler:
 
             elif "iSay" == file.filename[0:4]:
                 files_dict["template"] = {
+                    "file_name": file.filename,
+                    "excel_file": pd.ExcelFile(io.BytesIO(file.file.read())),
+                }
+
+            elif "ПРОВЕРКА" == file.filename[0:8]:
+                files_dict["check"] = {
                     "file_name": file.filename,
                     "excel_file": pd.ExcelFile(io.BytesIO(file.file.read())),
                 }
