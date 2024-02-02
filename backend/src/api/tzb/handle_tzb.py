@@ -7,7 +7,7 @@ router = APIRouter()
 
 @router.post("/")
 async def handle_tzb_files(files: list[UploadFile]) -> Response:
-    handler = TZBHandler(files, "tzb")
+    handler = TZBHandler(files)
     response = handler.run()
 
     return response

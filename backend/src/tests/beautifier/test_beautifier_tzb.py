@@ -16,6 +16,7 @@ def test_parse_row_for_tzb(row_simple):
         "Возраст": 30,
         "iSayMail": "00000000-1111-2222-3333-444444444444@i.inb.youthink.dev",
         "Reward": 150,
+        "Source": "source_one",
     }
 
     assert result == expected_result
@@ -137,8 +138,18 @@ def test_get_tzb_group(row_simple):
     parsed_row = beautifier.parse_row(row_simple)
     region = beautifier.get_refined_region(parsed_row)
     operator = beautifier.get_operator(parsed_row)
-    result = beautifier.get_tzb_group(region, operator)
-    expected_result = "Свердловская область_Мотив"
+    result = beautifier.get_tzb_group(region, operator, parsed_row["Source"])
+    expected_result = "Свердловская область_Мотив_iSay"
+
+    assert result == expected_result
+
+
+def test_get_tzb_group_for_source_two(row_simple_source_two):
+    parsed_row = beautifier.parse_row(row_simple_source_two)
+    region = beautifier.get_refined_region(parsed_row)
+    operator = beautifier.get_operator(parsed_row)
+    result = beautifier.get_tzb_group(region, operator, parsed_row["Source"])
+    expected_result = "Свердловская область_Мотив_iSay_replay"
 
     assert result == expected_result
 
@@ -180,7 +191,7 @@ def test_make_tailored_row_for_tzb(row_simple):
         "Operator": 7,
         "CallIntervalBegin": "08:00:00",
         "CallIntervalEnd": "20:00:00",
-        "Group": "Свердловская область_Мотив",
+        "Group": "Свердловская область_Мотив_iSay",
         "CHECK": "9001979228",
         "Mark": "12_7",
         "Пол": "Ж",

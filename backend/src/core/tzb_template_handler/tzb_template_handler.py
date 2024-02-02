@@ -13,11 +13,14 @@ from src.core.config_maker.tzb_config_maker import ConfigMaker
 from src.core.gender_age_extender.gender_age_extender import GenderAgeExtender
 from src.core.quotas_filter.quotas_filter import QuotasFilter
 from src.core.quotas_parser.quotas_parser import QuotasParser
+from src.core.tzb_checker.tzb_checker import TZBChecker
+from src.core.tzb_template_parser.tzb_template_parser import TZBTemplateParser
 
 
-class TZBHandler:
-    def __init__(self, files: list[UploadFile]) -> None:
+class TZBTemplateHandler:
+    def __init__(self, dates: Dict, files: list[UploadFile]) -> None:
         self.files = files
+        self.dates = dates
         self.config_maker = ConfigMaker()
 
     def run(self):
@@ -41,18 +44,37 @@ class TZBHandler:
             return self.make_error_response(error_description)
 
         try:
-            # Add gender, age, and adjusted region details to the original dataframe
-            extender = GenderAgeExtender()
-            details_dataframe = pd.read_excel(files_dict["source_macros"]["excel_file"], sheet_name="Исходник")
-            macros_dataframe = pd.read_excel(files_dict["source_macros"]["excel_file"], sheet_name="Макрос")
-            extended_dataframe = extender.make_extended_dataframe(macros_dataframe, details_dataframe)
+            # Create a source dataframe from the template
+            template_parser = TZBTemplateParser()
+            source_dataframe = template_parser.make_merged_source_dataframe(
+                self.dates, files_dict["template"]["excel_file"]
+            )
 
         except ValueError as error:
-            error_description = f"File name: {files_dict['source_macros']['file_name']}, ValueError: {str(error)}"
+            error_description = f"File name: {files_dict['template']['file_name']}, ValueError: {str(error)}"
+            return self.make_error_response(error_description)
+
+        try:
+            check_list = pd.read_excel(files_dict["check"]["excel_file"])
+            checker = TZBChecker(check_list)
+            checked_source_dataframe, completed_dataframe = checker.check_source(source_dataframe)
+
+        except ValueError as error:
+            error_description = f"File name: {files_dict['check']['file_name']}, ValueError: {str(error)}"
+            return self.make_error_response(error_description)
+
+        try:
+            # Add gender, age, and adjusted region details to the original dataframe
+            extender = GenderAgeExtender()
+            macros_dataframe = pd.read_excel(files_dict["template"]["excel_file"], sheet_name="Макрос")
+            extended_dataframe = extender.make_extended_dataframe(macros_dataframe, checked_source_dataframe)
+
+        except ValueError as error:
+            error_description = f"File name: {files_dict['template']['file_name']}, ValueError: {str(error)}"
             return self.make_error_response(error_description)
 
         except KeyError as error:
-            error_description = f"File name: {files_dict['source_macros']['file_name']}, KeyError: {str(error)}"
+            error_description = f"File name: {files_dict['template']['file_name']}, KeyError: {str(error)}"
             return self.make_error_response(error_description)
 
         try:
@@ -78,6 +100,8 @@ class TZBHandler:
 
             result_dataframes[0] = quota_application_results[0]
             result_dataframes.append(quota_application_results[1])
+            result_dataframes.append(checked_source_dataframe)
+            result_dataframes.append(completed_dataframe)
 
             result_dataframes[0].drop(inplace=True, columns=["Пол", "Возраст"])
 
@@ -114,18 +138,17 @@ class TZBHandler:
                 }
                 continue
 
-            excel_file = pd.ExcelFile(io.BytesIO(file.file.read()))
-            if "Исходник" in excel_file.sheet_names and "Макрос" in excel_file.sheet_names:
-                files_dict["source_macros"] = {
+            elif "iSay" == file.filename[0:4]:
+                files_dict["template"] = {
                     "file_name": file.filename,
-                    "excel_file": excel_file,
+                    "excel_file": pd.ExcelFile(io.BytesIO(file.file.read())),
                 }
-            elif "Исходник" in excel_file.sheet_names and "Макрос" not in excel_file.sheet_names:
-                raise ValueError(f"В файле {file.filename} не найдён лист 'Макрос'")
-            elif "Исходник" not in excel_file.sheet_names and "Макрос" in excel_file.sheet_names:
-                raise ValueError(f"В файле {file.filename} не найдён лист 'Исходник'")
-            else:
-                raise ValueError(f"В файле {file.filename} не найдены листы 'Исходник' и 'Макрос'")
+
+            elif "ПРОВЕРКА" == file.filename[0:8]:
+                files_dict["check"] = {
+                    "file_name": file.filename,
+                    "excel_file": pd.ExcelFile(io.BytesIO(file.file.read())),
+                }
 
         return files_dict
 
@@ -137,6 +160,8 @@ class TZBHandler:
             dataframes[1].to_excel(writer, sheet_name="empty", index=False)
             dataframes[2].to_excel(writer, sheet_name="ignored", index=False)
             dataframes[3].to_excel(writer, sheet_name="quota errors", index=False)
+            dataframes[4].to_excel(writer, sheet_name="source", index=False)
+            dataframes[5].to_excel(writer, sheet_name="completed", index=False)
 
         return Response(
             content=stream.getvalue(),
@@ -150,7 +175,7 @@ class TZBHandler:
     def get_result_file_name(self):
         now = datetime.now()
         timestamp = now.strftime("%Y-%m-%d_%H-%M")
-        return f"tzb-result-{timestamp}.xlsx"
+        return f"tzb-template-result-{timestamp}.xlsx"
 
     def make_error_response(self, error_text) -> JSONResponse:
         text = jsonable_encoder(error_text)
