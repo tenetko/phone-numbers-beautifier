@@ -33,6 +33,7 @@ def base_details_dataframe() -> DataFrame:
                 "Дата": "2023-09-20",
                 "Email": "00000000-1111-2222-3333-444444444444@i.inb.youthink.dev",
                 "Обещанная награда": "150",
+                "Source": "source_one",
             }
         ]
     )

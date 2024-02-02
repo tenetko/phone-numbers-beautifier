@@ -19,6 +19,7 @@ class GenderAgeExtender:
             row_dict["iSayMail"] = details["email"]
             row_dict["REGION"] = details["adjusted_region"]
             row_dict["Reward"] = details["reward"]
+            row_dict["Source"] = details["Source"]
 
             extended_dataset.append(row_dict)
 
@@ -34,6 +35,7 @@ class GenderAgeExtender:
                 "email": row["Email"],
                 "adjusted_region": row["Регион"],
                 "reward": row["Обещанная награда"],
+                "Source": row["Source"],
             }
 
         return result

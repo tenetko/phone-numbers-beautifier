@@ -69,6 +69,7 @@ class PhoneNumbersBeautifierTZB(PhoneNumbersBeautifier):
             "Возраст": row["Возраст"],
             "iSayMail": row["iSayMail"],
             "Reward": row["Reward"],
+            "Source": row["Source"],
         }
 
     def check_if_region_is_ignored(self, tailored_row: Dict[str, str]) -> bool:
@@ -102,7 +103,7 @@ class PhoneNumbersBeautifierTZB(PhoneNumbersBeautifier):
             "Operator": operator_code,
             "CallIntervalBegin": interval["begin"],
             "CallIntervalEnd": interval["end"],
-            "Group": self.get_tzb_group(region, operator),
+            "Group": self.get_tzb_group(region, operator, parsed_row["Source"]),
             "CHECK": self.get_external_id(phone_number),
             "Mark": self.get_tzb_mark(region_code, operator_code),
             "Пол": parsed_row["Пол"],
@@ -128,8 +129,11 @@ class PhoneNumbersBeautifierTZB(PhoneNumbersBeautifier):
 
         return False
 
-    def get_tzb_group(self, region: str, operator: str) -> str:
-        return f"{region}_{operator}"
+    def get_tzb_group(self, region: str, operator: str, source: str) -> str:
+        if source == "source_one":
+            return f"{region}_{operator}_iSay"
+        elif source == "source_two":
+            return f"{region}_{operator}_iSay_replay"
 
-    def get_tzb_mark(self, region_code: int, operator_code: int) -> str:
+    def get_tzb_mark(self, region_code: str, operator_code: str) -> str:
         return f"{region_code}_{operator_code}"

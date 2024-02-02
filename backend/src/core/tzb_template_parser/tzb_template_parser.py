@@ -35,7 +35,7 @@ class TZBTemplateParser:
         # We get rows between, and including, two dates specified in the interface
         result = dataframe.loc[
             (dataframe["Дата"] >= f"{date_from} 00:00:00") & (dataframe["Дата"] <= f"{date_to} 00:00:00")
-        ]
+        ].copy()
         result.reset_index(inplace=True, drop=True)
 
         return result
@@ -53,11 +53,10 @@ class TZBTemplateParser:
         date_to = self.get_date(dates["source_2_date_1"])
         source_two = self.make_filtered_source_dataframe(source_dataframe, date_from, date_to)
 
+        source_one["Source"] = pd.Series(["source_one"] * len(source_one.index))
+        source_two["Source"] = pd.Series(["source_two"] * len(source_two.index))
+
         merged_source_dataframe = pd.concat([source_one, source_two])
         merged_source_dataframe.reset_index(inplace=True, drop=True)
-        print(len(source_one))
-        print(len(source_two))
-        print(len(merged_source_dataframe))
-        print(merged_source_dataframe)
 
         return merged_source_dataframe
