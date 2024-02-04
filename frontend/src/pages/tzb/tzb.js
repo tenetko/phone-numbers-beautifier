@@ -129,12 +129,10 @@ const Page = () => {
       <Content>
       <Space direction="horizontal" style={{width: '100%', justifyContent: 'center'}}>
         <Typography.Text >
-          <p>Загрузи следующие файлы в любом порядке:</p>
-          <ul>
-            <li>report_common_statistic_202309281119_265fd58c4014806f.xlsx</li>
-            <li>Alive_TZB.xlsx</li>
-            <li>для 21.09.xlsx</li>
-          </ul>
+          <p>Upload the following files in any order:</p>
+            <Text code>report_common_statistic_202309281119_265fd58c4014806f.xlsx</Text>
+            <br/>
+            <Text code>iSay_w25_1001.xlsx</Text>
         </Typography.Text>        
         </Space>
         <Space
@@ -145,7 +143,7 @@ const Page = () => {
         >
           <Upload {...props}>
             <Button style={buttonStyle} icon={<UploadOutlined />}>
-              Выбрать файлы
+              Upload files
             </Button>
           </Upload>
           <Button
@@ -156,7 +154,7 @@ const Page = () => {
             style={submitButtonStyle}
             block
           >
-            {uploading ? "Загружаем..." : "Загрузить файлы"}
+            {uploading ? "Uploading..." : "Submit"}
           </Button>
           <Text code style={errorMessageStyle}>{errorMessage}</Text>
         </Space>

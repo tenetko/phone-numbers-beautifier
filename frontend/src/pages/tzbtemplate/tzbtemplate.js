@@ -146,12 +146,11 @@ const Page = () => {
       <Space direction="horizontal" style={{width: '100%', justifyContent: 'center'}}>
         <Typography.Text >
           <p>Upload the following files in any order:</p>
-          <ul>
-            <li>report_common_statistic_202309281119_265fd58c4014806f.xlsx</li>
-            <li>Alive_TZB.xlsx</li>
-            <li>iSay_template.xlsx</li>
-            <li>ПРОВЕРКА_25!.xlsx</li>
-          </ul>
+          <Text code>report_common_statistic_202309281119_265fd58c4014806f.xlsx</Text>
+          <br/>
+          <Text code>iSay_template.xlsx</Text>
+          <br/>
+          <Text code>ПРОВЕРКА_25!.xlsx</Text>
         </Typography.Text>        
         </Space>
         <Space

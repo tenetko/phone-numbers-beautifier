@@ -23,8 +23,8 @@ export default function App() {
       <Sidebar/>
       <Layout>
         <Layout.Content>          
-          <Route route={TZBPage.route} view={TZBPage.Page} />
           <Route route={TZBTemplatePage.route} view={TZBTemplatePage.Page} />
+          <Route route={TZBPage.route} view={TZBPage.Page} />          
           <Route route={RemindersPage.route} view={RemindersPage.Page} />
           <Route route={OSPage.route} view={OSPage.Page} />
         </Layout.Content>      

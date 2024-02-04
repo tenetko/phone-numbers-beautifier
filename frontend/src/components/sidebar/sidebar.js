@@ -14,15 +14,16 @@ export const Sidebar = () => {
     return(
         <Layout.Sider collapsible onCollapse={(collapsed) => setCollapsed(collapsed)}>        
         <Menu theme="dark" mode="inline">
+
+          <Menu.Item key="tzbtemplate" style={{textAlign: "right"}}>
+            <Link to={TZBTemplatePage.route}>
+              <span>Templates</span>            
+            </Link>
+          </Menu.Item>
+
           <Menu.Item key="tzb" style={{textAlign: "right"}}>
             <Link to={TZBPage.route}>
               <span>TZB</span>            
-            </Link>
-          </Menu.Item>
-  
-          <Menu.Item key="tzbtemplate" style={{textAlign: "right"}}>
-            <Link to={TZBTemplatePage.route}>
-              <span>TZB via templates</span>            
             </Link>
           </Menu.Item>
 
