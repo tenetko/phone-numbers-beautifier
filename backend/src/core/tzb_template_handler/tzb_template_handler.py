@@ -59,7 +59,7 @@ class TZBTemplateHandler:
             # Add gender, age, and adjusted region details to the original dataframe
             extender = GenderAgeExtender()
             macros_dataframe = pd.read_excel(files_dict["template"]["excel_file"], sheet_name="Макрос")
-            extended_dataframe = extender.make_extended_dataframe(macros_dataframe, checked_source_dataframe)
+            extended_dataframe = extender.make_extended_dataframe(macros_dataframe, source_dataframe)
 
         except ValueError as error:
             error_description = f"File name: {files_dict['template']['file_name']}, ValueError: {str(error)}"
@@ -75,11 +75,11 @@ class TZBTemplateHandler:
             result_dataframes = list(result_dataframes)
 
         except ValueError as error:
-            error_description = f"File name: {files_dict['source_macros']['file_name']}, ValueError: {str(error)}"
+            error_description = f"File name: {files_dict['template']['file_name']}, ValueError: {str(error)}"
             return self.make_error_response(error_description)
 
         except KeyError as error:
-            error_description = f"File name: {files_dict['source_macros']['file_name']}, KeyError: {str(error)}"
+            error_description = f"File name: {files_dict['template']['file_name']}, KeyError: {str(error)}"
             return self.make_error_response(error_description)
 
         try:
@@ -136,7 +136,7 @@ class TZBTemplateHandler:
                     "excel_file": pd.ExcelFile(io.BytesIO(file.file.read())),
                 }
 
-            elif "ПРОВЕРКА" == file.filename[0:8]:
+            elif "ПРОВЕРКА" in file.filename:
                 files_dict["check"] = {
                     "file_name": file.filename,
                     "excel_file": pd.ExcelFile(io.BytesIO(file.file.read())),
