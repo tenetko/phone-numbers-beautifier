@@ -16,7 +16,7 @@ const buttonStyle = {
   width: 300,
   paddingInline: 50,
   lineHeight: "57px",
-  backgroundColor: "#ffab96",
+  backgroundColor: "#d1b3ff",
   marginTop: 20,
   marginBottom: 20
 };
@@ -28,7 +28,7 @@ const submitButtonStyle = {
   width: 300,
   paddingInline: 50,
   lineHeight: "57px",
-  backgroundColor: "#a62100",
+  backgroundColor: "#39008f",
 };
 
 const errorMessageStyle = {

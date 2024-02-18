@@ -1,6 +1,5 @@
 import { Layout, Typography } from "antd";
 
-import { TZBPage } from "./pages/tzb";
 import { TZBTemplatePage } from "./pages/tzbtemplate";
 import { RemindersPage } from "./pages/reminders";
 import { OSPage } from "./pages/os"
@@ -23,8 +22,7 @@ export default function App() {
       <Sidebar/>
       <Layout>
         <Layout.Content>          
-          <Route route={TZBTemplatePage.route} view={TZBTemplatePage.Page} />
-          <Route route={TZBPage.route} view={TZBPage.Page} />          
+          <Route route={TZBTemplatePage.route} view={TZBTemplatePage.Page} />          
           <Route route={RemindersPage.route} view={RemindersPage.Page} />
           <Route route={OSPage.route} view={OSPage.Page} />
         </Layout.Content>      

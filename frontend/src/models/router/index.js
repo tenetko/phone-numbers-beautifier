@@ -11,7 +11,6 @@ export const routes = {
 export const router = createHistoryRouter({
   routes: [
     { path: "/", route: routes.tzbtemplate },
-    { path: "/tzb", route: routes.tzb },
     { path: "/tzbtemplate", route: routes.tzbtemplate },
     { path: "/reminders", route: routes.reminders },
     { path: "/os", route: routes.os },
