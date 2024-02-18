@@ -10,7 +10,7 @@ from fastapi.responses import JSONResponse
 from pandas import DataFrame
 
 from src.core.beautifier.beautifier_tzb import PhoneNumbersBeautifierTZB
-from src.core.config_maker.tzb_config_maker import ConfigMaker
+from src.core.config_storage.config_storage import ConfigStorage
 from src.core.quotas_filter.quotas_filter import QuotasFilter
 from src.core.quotas_parser.quotas_parser import QuotasParser
 
@@ -18,23 +18,15 @@ from src.core.quotas_parser.quotas_parser import QuotasParser
 class RemindersHandler:
     def __init__(self, files: list[UploadFile]) -> None:
         self.files = files
-        self.config_maker = ConfigMaker()
 
     def run(self):
         files_dict = self.get_files_matches(self.files)
 
-        try:
-            # Try to parse the 'Alive' file
-            config = self.config_maker.make_config_file(io.BytesIO(files_dict["beautifier"].file.read()))
-            beautifier = PhoneNumbersBeautifierTZB(config)
-
-        except ValueError as error:
-            error_description = f"File name: {files_dict['beautifier'].filename}, ValueError: {str(error)}"
-            return self.make_error_response(error_description)
-
-        except KeyError as error:
-            error_description = f"File name: {files_dict['beautifier'].filename}, KeyError: {str(error)}"
-            return self.make_error_response(error_description)
+        # Make a config from the config storage which corresponds to the latest Alive file
+        # and make a beautifier instance
+        config_storage = ConfigStorage()
+        config = config_storage.provide_config()
+        beautifier = PhoneNumbersBeautifierTZB(config)
 
         try:
             # Try to parse the file with quotas

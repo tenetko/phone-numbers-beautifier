@@ -13,6 +13,7 @@ def test_make_details_dict(base_details_dataframe):
             "email": "00000000-1111-2222-3333-444444444444@i.inb.youthink.dev",
             "adjusted_region": "Волгоградская область",
             "reward": "150",
+            "Source": "source_one",
         }
     }
 
@@ -31,6 +32,7 @@ def test_make_extended_dataframe(base_dataframe, base_details_dataframe):
                 "Возраст": "27",
                 "iSayMail": "00000000-1111-2222-3333-444444444444@i.inb.youthink.dev",
                 "Reward": "150",
+                "Source": "source_one",
             }
         ]
     )

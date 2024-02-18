@@ -9,17 +9,15 @@ from fastapi.responses import JSONResponse
 from pandas import DataFrame, ExcelFile
 
 from src.core.beautifier.beautifier_tzb import PhoneNumbersBeautifierTZB
-from src.core.config_maker.tzb_config_maker import ConfigMaker
+from src.core.config_storage.config_storage import ConfigStorage
 from src.core.gender_age_extender.gender_age_extender import GenderAgeExtender
 from src.core.quotas_filter.quotas_filter import QuotasFilter
 from src.core.quotas_parser.quotas_parser import QuotasParser
 
 
 class TZBHandler:
-    def __init__(self, files: list[UploadFile], project_name: str) -> None:
+    def __init__(self, files: list[UploadFile]) -> None:
         self.files = files
-        self.project_name = project_name
-        self.config_maker = ConfigMaker()
 
     def run(self):
         try:
@@ -28,18 +26,11 @@ class TZBHandler:
             error_description = f"{error}"
             return self.make_error_response(error_description)
 
-        try:
-            # Make a config from the Alive file and make a beautifier instance
-            config = self.config_maker.make_config_file(files_dict["beautifier"]["excel_file"])
-            beautifier = PhoneNumbersBeautifierTZB(config)
-
-        except ValueError as error:
-            error_description = f"File name: {files_dict['beautifier']['file_name']}, ValueError: {str(error)}"
-            return self.make_error_response(error_description)
-
-        except KeyError as error:
-            error_description = f"File name: {files_dict['beautifier']['file_name']}, KeyError: {str(error)}"
-            return self.make_error_response(error_description)
+        # Make a config from the config storage which corresponds to the latest Alive file
+        # and make a beautifier instance
+        config_storage = ConfigStorage()
+        config = config_storage.provide_config()
+        beautifier = PhoneNumbersBeautifierTZB(config)
 
         try:
             # Add gender, age, and adjusted region details to the original dataframe

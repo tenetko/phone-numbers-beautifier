@@ -7,7 +7,7 @@ router = APIRouter()
 
 @router.post("/")
 async def handle_os_files(files: list[UploadFile]) -> Response:
-    handler = OSHandler(files, "os")
+    handler = OSHandler(files)
     response = handler.run()
 
     return response

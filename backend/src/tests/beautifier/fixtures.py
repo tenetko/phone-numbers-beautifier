@@ -15,6 +15,25 @@ def row_simple() -> Series:
             "Возраст": 30,
             "iSayMail": "00000000-1111-2222-3333-444444444444@i.inb.youthink.dev",
             "Reward": 150,
+            "Source": "source_one",
+        }
+    )
+
+
+@fixture
+def row_simple_source_two() -> Series:
+    return Series(
+        data={
+            "num": 79001979228,
+            "IdRegion": 83,
+            "IdOper": 28,
+            "REGION": "Свердловская обл.",
+            "OPERATOR": 'ООО "ЕКАТЕРИНБУРГ-2000"',
+            "Пол": "Ж",
+            "Возраст": 30,
+            "iSayMail": "00000000-1111-2222-3333-444444444444@i.inb.youthink.dev",
+            "Reward": 150,
+            "Source": "source_two",
         }
     )
 
@@ -32,6 +51,7 @@ def row_for_nonexistent_region() -> Series:
             "Возраст": 30,
             "iSayMail": "00000000-1111-2222-3333-444444444444@i.inb.youthink.dev",
             "Reward": 150,
+            "Source": "source_one",
         }
     )
 
@@ -49,6 +69,7 @@ def row_for_chukotka() -> Series:
             "Возраст": 30,
             "iSayMail": "00000000-1111-2222-3333-444444444444@i.inb.youthink.dev",
             "Reward": 150,
+            "Source": "source_one",
         }
     )
 
@@ -66,6 +87,7 @@ def row_for_motiv() -> Series:
             "Возраст": 30,
             "iSayMail": "00000000-1111-2222-3333-444444444444@i.inb.youthink.dev",
             "Reward": 150,
+            "Source": "source_one",
         }
     )
 
@@ -83,6 +105,7 @@ def row_for_yota_moscow() -> Series:
             "Возраст": 30,
             "iSayMail": "00000000-1111-2222-3333-444444444444@i.inb.youthink.dev",
             "Reward": 150,
+            "Source": "source_one",
         }
     )
 
@@ -100,6 +123,7 @@ def row_for_yota_krasnodar_kray() -> Series:
             "Возраст": 30,
             "iSayMail": "00000000-1111-2222-3333-444444444444@i.inb.youthink.dev",
             "Reward": 150,
+            "Source": "source_one",
         }
     )
 
@@ -117,5 +141,6 @@ def row_for_sim_telecom() -> Series:
             "Возраст": 30,
             "iSayMail": "00000000-1111-2222-3333-444444444444@i.inb.youthink.dev",
             "Reward": 150,
+            "Source": "source_one",
         }
     )
