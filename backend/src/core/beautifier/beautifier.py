@@ -1,11 +1,16 @@
 from typing import Dict, Tuple
 
+from loguru import logger
 from pandas import DataFrame, Series
+
+from src.utils.logging import Sink
 
 
 class PhoneNumbersBeautifier:
     def __init__(self, config):
         self.config = config
+        self.logs = Sink()
+        logger.add(sink=self.logs, serialize=True)
 
     def parse_dataset(self, dataframe: DataFrame) -> Tuple[DataFrame, DataFrame, DataFrame]:
         raise NotImplementedError
@@ -73,7 +78,12 @@ class PhoneNumbersBeautifier:
         return self.config["filials"][region]
 
     def get_operator(self, row: Dict) -> str:
-        return self.config["operators"][row["operator"]]
+        try:
+            return self.config["operators"][row["operator"]]
+        except KeyError:
+            logger.exception(
+                f"Phone number {row['phone_number']} has empty 'OPERATOR' value after extending the macros with the source"
+            )
 
     def get_interval(self, region: str) -> Dict[str, str]:
         return self.config["intervals"][region]
