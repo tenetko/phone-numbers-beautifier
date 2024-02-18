@@ -34,7 +34,7 @@ This program takes several ugly Excel files and makes a finalized file with prop
      ```
 
 7. Isort:
-    ``zsh
+   ```zsh
    make isort
    make isort-fix
    ```
