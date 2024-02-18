@@ -28,7 +28,7 @@ export default function App() {
         </Layout.Content>      
         <Layout.Footer style={footerStyle}>
           <Typography.Text style={{textAlign: "center"}}>
-            ver. 1.0.7: ignore tab, quotas filter, error notifications, reminders, simple upload pages, and TZB templates)
+            ver. 1.0.8: ignore tab, quotas filter, error notifications, reminders, simple upload pages, TZB templates, and better error logging)
           </Typography.Text>     
         </Layout.Footer>
       </Layout>
