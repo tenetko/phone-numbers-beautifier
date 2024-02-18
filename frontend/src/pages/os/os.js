@@ -129,12 +129,10 @@ const Page = () => {
       <Content>
         <Space direction="horizontal" style={{width: '100%', justifyContent: 'center'}}>
         <Typography.Text >
-          <p>Загрузи следующие файлы в любом порядке:</p>
-          <ul>            
-            <li>Alive_OS.xlsx</li>
-            <li>OS80_2510.xlsx</li>
-            <br/>
-          </ul>
+        <p>Upload the following files in any order:</p>
+          <Text code>Alive_OS.xlsx</Text>
+          <br/>
+          <Text code>OS80_2510.xlsx</Text>          
         </Typography.Text>        
         </Space>
         <Space
