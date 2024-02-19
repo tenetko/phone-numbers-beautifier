@@ -1,9 +1,8 @@
-from mocks import MOCK_DATA
-
 from src.core.beautifier.beautifier_tzb import PhoneNumbersBeautifierTZB
 from src.tests.beautifier.fixtures import *
+from src.utils.config_storage.config_storage import ConfigStorage
 
-beautifier = PhoneNumbersBeautifierTZB(MOCK_DATA["config_tzb"])
+beautifier = PhoneNumbersBeautifierTZB(ConfigStorage.get_config())
 
 
 def test_parse_row_for_tzb(row_simple):

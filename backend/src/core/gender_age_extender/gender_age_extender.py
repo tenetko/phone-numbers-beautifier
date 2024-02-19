@@ -4,7 +4,7 @@ from typing import Dict, Tuple
 from loguru import logger
 from pandas import DataFrame
 
-from src.utils.logging import Sink
+from src.utils.logging.logging import Sink
 
 
 class GenderAgeExtender:

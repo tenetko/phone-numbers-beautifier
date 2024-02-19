@@ -3,7 +3,7 @@ from typing import Dict, Tuple
 from loguru import logger
 from pandas import DataFrame, Series
 
-from src.utils.logging import Sink
+from src.utils.logging.logging import Sink
 
 
 class PhoneNumbersBeautifier:

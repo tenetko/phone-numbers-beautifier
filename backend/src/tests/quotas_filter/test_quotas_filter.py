@@ -5,11 +5,11 @@ import pandas as pd
 from src.core.beautifier.beautifier_tzb import PhoneNumbersBeautifierTZB
 from src.core.quotas_filter.quotas_filter import QuotasFilter
 from src.core.quotas_parser.quotas_parser import QuotasParser
-from src.tests.beautifier.mocks import MOCK_DATA as BEAUTIFIER_MOCK_DATA
 from src.tests.quotas_parser.fixtures import quotas_dataframe
+from src.utils.config_storage.config_storage import ConfigStorage
 
 quotas_filter = QuotasFilter()
-beautifier = PhoneNumbersBeautifierTZB(BEAUTIFIER_MOCK_DATA["config_tzb"])
+beautifier = PhoneNumbersBeautifierTZB(ConfigStorage.get_config())
 quotas_parser = QuotasParser(beautifier)
 
 

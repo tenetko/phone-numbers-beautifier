@@ -1,5 +1,4 @@
 import io
-import json
 from datetime import datetime
 from typing import Dict
 
@@ -10,7 +9,7 @@ from fastapi.responses import JSONResponse
 from pandas import DataFrame
 
 from src.core.beautifier.beautifier_tzb import PhoneNumbersBeautifierTZB
-from src.core.config_storage.config_storage import ConfigStorage
+from src.utils.config_storage.config_storage import ConfigStorage
 from src.core.quotas_filter.quotas_filter import QuotasFilter
 from src.core.quotas_parser.quotas_parser import QuotasParser
 
@@ -24,8 +23,7 @@ class RemindersHandler:
 
         # Make a config from the config storage which corresponds to the latest Alive file
         # and make a beautifier instance
-        config_storage = ConfigStorage()
-        config = config_storage.provide_config()
+        config = ConfigStorage.get_config()
         beautifier = PhoneNumbersBeautifierTZB(config)
 
         try:
@@ -94,7 +92,7 @@ class RemindersHandler:
     def get_result_file_name(self):
         now = datetime.now()
         timestamp = now.strftime("%Y-%m-%d_%H-%M")
-        return f"result-{timestamp}.xlsx"
+        return f"reminders-{timestamp}.xlsx"
 
     def make_error_response(self, error_text) -> JSONResponse:
         text = jsonable_encoder(error_text)

@@ -2,11 +2,11 @@ from collections import defaultdict
 
 from src.core.beautifier.beautifier_tzb import PhoneNumbersBeautifierTZB
 from src.core.quotas_parser.quotas_parser import QuotasParser
-from src.tests.beautifier.mocks import MOCK_DATA as BEAUTIFIER_MOCK_DATA
 from src.tests.quotas_parser.fixtures import *
 from src.tests.quotas_parser.mocks import MOCK_DATA as QUOTAS_PARSER_MOCK_DATA
+from src.utils.config_storage.config_storage import ConfigStorage
 
-beautifier = PhoneNumbersBeautifierTZB(BEAUTIFIER_MOCK_DATA["config_tzb"])
+beautifier = PhoneNumbersBeautifierTZB(ConfigStorage.get_config())
 quotas_parser = QuotasParser(beautifier)
 
 
