@@ -9,9 +9,9 @@ from fastapi.responses import JSONResponse
 from pandas import DataFrame
 
 from src.core.beautifier.beautifier_tzb import PhoneNumbersBeautifierTZB
-from src.utils.config_storage.config_storage import ConfigStorage
 from src.core.quotas_filter.quotas_filter import QuotasFilter
 from src.core.quotas_parser.quotas_parser import QuotasParser
+from src.utils.config_storage.config_storage import ConfigStorage
 
 
 class RemindersHandler:

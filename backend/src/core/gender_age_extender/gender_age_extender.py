@@ -23,7 +23,6 @@ class GenderAgeExtender:
             try:
                 details = details_dict[str(phone_number)]
             except KeyError:
-                print(self.dates)
                 message = (
                     f"The source file does not have a phone number {phone_number} within specified date ranges. "
                     f"Try setting wider date ranges"

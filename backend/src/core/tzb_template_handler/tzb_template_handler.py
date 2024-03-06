@@ -10,12 +10,12 @@ from loguru import logger
 from pandas import DataFrame, ExcelFile
 
 from src.core.beautifier.beautifier_tzb import PhoneNumbersBeautifierTZB
-from src.utils.config_storage.config_storage import ConfigStorage
 from src.core.gender_age_extender.gender_age_extender import GenderAgeExtender
 from src.core.quotas_filter.quotas_filter import QuotasFilter
 from src.core.quotas_parser.quotas_parser import QuotasParser
 from src.core.tzb_checker.tzb_checker import TZBChecker
 from src.core.tzb_template_parser.tzb_template_parser import TZBTemplateParser
+from src.utils.config_storage.config_storage import ConfigStorage
 from src.utils.logging.logging import Sink
 
 
