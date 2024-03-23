@@ -1,11 +1,14 @@
 import json
-from typing import Tuple
+from typing import Dict, Tuple
 
 import pandas as pd
 from pandas import DataFrame
 
 
 class QuotasFilter:
+    def __init__(self, config: Dict):
+        self.config = config
+
     def filter_phone_numbers(self, phone_numbers: DataFrame, quotas: dict) -> Tuple[DataFrame, DataFrame]:
         rows_with_quotas = []
         rows_with_errors = []
@@ -104,15 +107,7 @@ class QuotasFilter:
         return False
 
     def get_age_and_gender_from_reminder(self, row: dict) -> Tuple[str, str]:
-        # "513_23_Тюменская область_Мегафон_Ж3645" --> ("Ж", "36")
-        group = row["Group"][-5:]  # Ж3645
-        age = int(group[1:3])
-        gender = group[:1]
-        if gender == "М":
-            gender = "Мужской"
-        elif gender == "Ж":
-            gender = "Женский"
-        else:
-            raise ValueError("Gender is neither М nor Ж")
+        gender = self.config["genders"][str(row["Sex"])]
+        age = self.config["ages"][str(row["Age"])]
 
         return gender, age

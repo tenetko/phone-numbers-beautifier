@@ -7,7 +7,7 @@ from src.utils.logging.logging import Sink
 
 
 class PhoneNumbersBeautifier:
-    def __init__(self, config):
+    def __init__(self, config: Dict):
         self.config = config
         self.logs = Sink()
         logger.add(sink=self.logs, serialize=True)

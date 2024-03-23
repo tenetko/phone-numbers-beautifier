@@ -8,7 +8,7 @@ from src.core.quotas_parser.quotas_parser import QuotasParser
 from src.tests.quotas_parser.fixtures import quotas_dataframe
 from src.utils.config_storage.config_storage import ConfigStorage
 
-quotas_filter = QuotasFilter()
+quotas_filter = QuotasFilter(ConfigStorage.get_config())
 beautifier = PhoneNumbersBeautifierTZB(ConfigStorage.get_config())
 quotas_parser = QuotasParser(beautifier)
 
@@ -194,7 +194,9 @@ def test_filter_reminders(quotas_dataframe):
             {
                 "RegionName": "Республика Хакасия",
                 "OperatorName": "МТС",
-                "Group": "191_13_Республика Хакасия_МТС_М3645",
+                "Group": "Республика Хакасия_МТС",
+                "Sex": 1,
+                "Age": 3,
             }
         ]
     )
@@ -205,7 +207,9 @@ def test_filter_reminders(quotas_dataframe):
             {
                 "RegionName": "Республика Хакасия",
                 "OperatorName": "МТС",
-                "Group": "191_13_Республика Хакасия_МТС_М3645",
+                "Group": "Республика Хакасия_МТС",
+                "Sex": 1,
+                "Age": 3,
                 "Пол": "Мужской",
                 "Возраст": 36,
                 "IsCallable": True,
@@ -235,7 +239,9 @@ def test_filter_reminders(quotas_dataframe):
 
 def test_get_age_and_gender_from_reminder():
     row = {
-        "Group": "191_13_Республика Хакасия_МТС_М3645",
+        "Group": "Республика Хакасия_МТС",
+        "Sex": 1,
+        "Age": 3,
     }
     result = quotas_filter.get_age_and_gender_from_reminder(row)
     expected_result = ("Мужской", 36)

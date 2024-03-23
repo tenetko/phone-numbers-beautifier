@@ -42,7 +42,7 @@ class RemindersHandler:
 
         try:
             # Try to parse the file with reminders
-            quotas_filter = QuotasFilter()
+            quotas_filter = QuotasFilter(config)
             reminders_dataframe = pd.read_excel(io.BytesIO(files_dict["reminders"].file.read()))
             quota_application_results = quotas_filter.filter_reminders(reminders_dataframe, quotas_dict)
 
