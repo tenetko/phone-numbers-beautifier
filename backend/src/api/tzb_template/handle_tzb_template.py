@@ -8,21 +8,8 @@ router = APIRouter()
 
 
 @router.post("/")
-async def handle_tzb_files(
-    source_1_date_0: Annotated[str, Form()],
-    source_1_date_1: Annotated[str, Form()],
-    source_2_date_0: Annotated[str, Form()],
-    source_2_date_1: Annotated[str, Form()],
-    files: list[UploadFile],
-) -> Response:
-    dates = {
-        "source_1_date_0": source_1_date_0,
-        "source_1_date_1": source_1_date_1,
-        "source_2_date_0": source_2_date_0,
-        "source_2_date_1": source_2_date_1,
-    }
-
-    handler = TZBTemplateHandler(dates, files)
+async def handle_tzb_files(files: list[UploadFile]) -> Response:
+    handler = TZBTemplateHandler(files)
     response = handler.run()
 
     return response

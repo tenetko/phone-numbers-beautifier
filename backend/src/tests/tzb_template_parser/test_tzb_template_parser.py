@@ -34,14 +34,3 @@ def test_get_date_from_date_time_late_night_case():
     expected_result = "2024-01-01"
 
     assert result == expected_result
-
-
-def test_make_filtered_source_dataframe(source_dataframe, expected_source_dataframe):
-    raw_date_from = "Mon, 11 Jan 2024 01:02:03 GMT"
-    raw_date_to = "Mon, 12 Jan 2024 04:05:06 GMT"
-    date_from = template_parser.get_date(raw_date_from)
-    date_to = template_parser.get_date(raw_date_to)
-    result = template_parser.make_filtered_source_dataframe(source_dataframe, date_from, date_to)
-    expected_result = expected_source_dataframe
-
-    assert result.equals(expected_result)

@@ -20,9 +20,8 @@ from src.utils.logging.logging import Sink
 
 
 class TZBTemplateHandler:
-    def __init__(self, dates: Dict, files: list[UploadFile]) -> None:
+    def __init__(self, files: list[UploadFile]) -> None:
         self.files = files
-        self.dates = dates
         self.logs = Sink()
         logger.add(sink=self.logs, serialize=True)
 
@@ -35,13 +34,12 @@ class TZBTemplateHandler:
 
         # Make a config from the config storage which corresponds to the latest Alive file
         # and make a beautifier instance
-        beautifier = PhoneNumbersBeautifierTZB(ConfigStorage.get_config())
+        config = ConfigStorage.get_config()
+        beautifier = PhoneNumbersBeautifierTZB(config)
 
         # Create a merged source dataframe from the template file filtered by dates
         template_parser = TZBTemplateParser()
-        source_dataframe = template_parser.make_merged_source_dataframe(
-            self.dates, files_dict["template"]["excel_file"]
-        )
+        source_dataframe = template_parser.make_merged_source_dataframe(files_dict["template"]["excel_file"])
 
         # Perform a 'check' operation that filters phone numbers that are already present in the 'check' file
         check_list = pd.read_excel(files_dict["check"]["excel_file"])
@@ -71,7 +69,7 @@ class TZBTemplateHandler:
             # Add isCallable flag to dataframes[0] according to quotas
             quotas_dataframe = pd.read_excel(files_dict["quotas"]["excel_file"])
             quotas_parser = QuotasParser(beautifier)
-            quotas_filter = QuotasFilter()
+            quotas_filter = QuotasFilter(config)
             quotas_dict = quotas_parser.make_quotas_dictionary(quotas_dataframe)
             quota_application_results = quotas_filter.filter_phone_numbers(result_dataframes[0], quotas_dict)
 

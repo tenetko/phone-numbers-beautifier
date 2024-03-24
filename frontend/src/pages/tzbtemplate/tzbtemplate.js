@@ -1,4 +1,4 @@
-import { Button, DatePicker, Form, Layout, message, Space, Typography, Upload } from "antd";
+import { Button, Form, Layout, message, Space, Typography, Upload } from "antd";
 import axios from "axios";
 import { useState } from "react";
 import { routes } from "../../models/router";
@@ -7,7 +7,6 @@ import "antd/dist/reset.css";
 
 const { Content } = Layout;
 const { Text, Title } = Typography;
-const { RangePicker } = DatePicker;
 
 const buttonStyle = {
   textAlign: "center",
@@ -50,10 +49,6 @@ const Page = () => {
       : 'http://127.0.0.1:8000/api/tzb_template/handle/'
 
       const data = new FormData();
-      data.append('source_1_date_0', String(values.source_1_date_range[0]));
-      data.append('source_1_date_1', String(values.source_1_date_range[1]));
-      data.append('source_2_date_0', String(values.source_2_date_range[0]));
-      data.append('source_2_date_1', String(values.source_2_date_range[1]));
       fileList.forEach((file) => {
         data.append("files", file);
       });      
@@ -160,16 +155,6 @@ const Page = () => {
           style={{ width: "100%" }}
         >
           <Form onFinish={handleSubmit}>
-
-            <Typography.Text >Select date range for Source 1:</Typography.Text>
-            <Form.Item name="source_1_date_range">
-              <RangePicker />
-            </Form.Item>
-
-            <Typography.Text >Select date range for Source 2:</Typography.Text>
-            <Form.Item name="source_2_date_range">
-              <RangePicker />
-            </Form.Item>            
 
             <Form.Item name="files">
               <Upload {...props} valuePropName="fileList" getValueFromEvent={normFile}>
