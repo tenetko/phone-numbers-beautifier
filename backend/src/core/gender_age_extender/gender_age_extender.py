@@ -74,7 +74,7 @@ class GenderAgeExtender:
         result = {}
 
         for _, row in dataframe_with_details.iterrows():
-            result[str(row["Номер телефона"])] = {
+            result[str(int(row["Номер телефона"]))] = {
                 "gender": row["Пол"],
                 "age": row["Возраст"],
                 "email": row["Email"],
