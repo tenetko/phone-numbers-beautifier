@@ -64,12 +64,12 @@ class PhoneNumbersBeautifierTZB(PhoneNumbersBeautifier):
         return {
             "phone_number": str(row["num"]).replace(" ", ""),
             "region": row["REGION"],
-            "operator": row["OPERATOR"],
+            "operator": row["Оператор сотовой связи"],
             "Пол": row["Пол"],
             "Возраст": row["Возраст"],
             "iSayMail": row["iSayMail"],
             "Reward": row["Reward"],
-            "Source": row["Source"],
+            "Source": row["Source"]
         }
 
     def check_if_region_is_ignored(self, tailored_row: Dict[str, str]) -> bool:
@@ -101,8 +101,8 @@ class PhoneNumbersBeautifierTZB(PhoneNumbersBeautifier):
             "TimeDifference": self.get_time_difference(region),
             "Region": region_code,
             "Operator": operator_code,
-            "CallIntervalBegin": interval["begin"],
-            "CallIntervalEnd": interval["end"],
+            "CallIntervalBegin": "10:00:00",
+            "CallIntervalEnd": "22:00:00",
             "Group": self.get_tzb_group(region, operator, parsed_row["Source"]),
             "CHECK": self.get_external_id(phone_number),
             "Mark": self.get_tzb_mark(region_code, operator_code),
