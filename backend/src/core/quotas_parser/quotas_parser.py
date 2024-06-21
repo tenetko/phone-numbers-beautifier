@@ -107,7 +107,7 @@ class QuotasParser:
             return ""
 
         quota_balance = quota_value - quota_usage
-        if quota_balance < 0:
+        if quota_balance < 1:
             return 0
 
         return quota_balance
