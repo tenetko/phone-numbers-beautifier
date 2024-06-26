@@ -6,8 +6,8 @@ from src.tests.beautifier.fixtures import *
 beautifier = PhoneNumbersBeautifierOS(MOCK_DATA["config_os"])
 
 
-def test_parse_row_for_os(row_simple):
-    result = beautifier.parse_row(row_simple)
+def test_parse_row_for_os(row_simple_for_os):
+    result = beautifier.parse_row(row_simple_for_os)
     expected_result = {
         "phone_number": "79001979228",
         "region": "Свердловская обл.",
@@ -17,16 +17,16 @@ def test_parse_row_for_os(row_simple):
     assert result == expected_result
 
 
-def test_check_if_region_is_allowed(row_simple):
-    parsed_row = beautifier.parse_row(row_simple)
+def test_check_if_region_is_allowed(row_simple_for_os):
+    parsed_row = beautifier.parse_row(row_simple_for_os)
     result = beautifier.check_if_region_is_allowed(parsed_row)
     expected_result = True
 
     assert result == expected_result
 
 
-def test_check_if_region_is_disallowed(row_for_nonexistent_region):
-    parsed_row = beautifier.parse_row(row_for_nonexistent_region)
+def test_check_if_region_is_disallowed(row_for_nonexistent_region_for_os):
+    parsed_row = beautifier.parse_row(row_for_nonexistent_region_for_os)
     result = beautifier.check_if_region_is_allowed(parsed_row)
     expected_result = False
 
@@ -86,16 +86,16 @@ def test_get_external_id():
     assert result == expected_result
 
 
-def test_get_refined_region(row_simple):
-    parsed_row = beautifier.parse_row(row_simple)
+def test_get_refined_region(row_simple_for_os):
+    parsed_row = beautifier.parse_row(row_simple_for_os)
     result = beautifier.get_refined_region(parsed_row)
     expected_result = "Свердловская область"
 
     assert result == expected_result
 
 
-def test_get_region_code(row_simple):
-    parsed_row = beautifier.parse_row(row_simple)
+def test_get_region_code(row_simple_for_os):
+    parsed_row = beautifier.parse_row(row_simple_for_os)
     region = beautifier.get_refined_region(parsed_row)
     result = beautifier.get_region_code(region)
     expected_result = 66
@@ -103,8 +103,8 @@ def test_get_region_code(row_simple):
     assert result == expected_result
 
 
-def test_get_federal_district(row_simple):
-    parsed_row = beautifier.parse_row(row_simple)
+def test_get_federal_district(row_simple_for_os):
+    parsed_row = beautifier.parse_row(row_simple_for_os)
     region = beautifier.get_refined_region(parsed_row)
     result = beautifier.get_federal_district(region)
     expected_result = "Уральский"
@@ -112,8 +112,8 @@ def test_get_federal_district(row_simple):
     assert result == expected_result
 
 
-def test_get_federal_district_code(row_simple):
-    parsed_row = beautifier.parse_row(row_simple)
+def test_get_federal_district_code(row_simple_for_os):
+    parsed_row = beautifier.parse_row(row_simple_for_os)
     region = beautifier.get_refined_region(parsed_row)
     federal_district = beautifier.get_federal_district(region)
     result = beautifier.get_federal_district_code(federal_district)
@@ -124,8 +124,8 @@ def test_get_federal_district_code(row_simple):
 
 #
 #
-def test_get_filial_code(row_simple):
-    parsed_row = beautifier.parse_row(row_simple)
+def test_get_filial_code(row_simple_for_os):
+    parsed_row = beautifier.parse_row(row_simple_for_os)
     region = beautifier.get_refined_region(parsed_row)
     result = beautifier.get_filial_code(region)
     expected_result = 7
@@ -133,16 +133,16 @@ def test_get_filial_code(row_simple):
     assert result == expected_result
 
 
-def test_get_operator(row_simple):
-    parsed_row = beautifier.parse_row(row_simple)
+def test_get_operator(row_simple_for_os):
+    parsed_row = beautifier.parse_row(row_simple_for_os)
     result = beautifier.get_operator(parsed_row)
     expected_result = 7
 
     assert result == expected_result
 
 
-def test_make_log_row_for_os(row_simple):
-    parsed_row = beautifier.parse_row(row_simple)
+def test_make_log_row_for_os(row_simple_for_os):
+    parsed_row = beautifier.parse_row(row_simple_for_os)
     result = beautifier.make_log_row_for_missing_region(parsed_row)
     expected_result = {
         "Number": "79001979228",
@@ -154,8 +154,8 @@ def test_make_log_row_for_os(row_simple):
     assert result == expected_result
 
 
-def test_make_tailored_row_for_os(row_simple):
-    parsed_row = beautifier.parse_row(row_simple)
+def test_make_tailored_row_for_os(row_simple_for_os):
+    parsed_row = beautifier.parse_row(row_simple_for_os)
     result = beautifier.make_tailored_row(parsed_row)
     expected_result = {
         "Number": "79001979228",
@@ -174,16 +174,16 @@ def test_make_tailored_row_for_os(row_simple):
     assert result == expected_result
 
 
-def test_check_if_region_is_ignored_for_os_for_usual_case(row_simple):
-    parsed_row = beautifier.parse_row(row_simple)
+def test_check_if_region_is_ignored_for_os_for_usual_case(row_simple_for_os):
+    parsed_row = beautifier.parse_row(row_simple_for_os)
     tailored_row = beautifier.make_tailored_row(parsed_row)
     result = beautifier.check_if_region_is_ignored(tailored_row)
 
     assert result == False
 
 
-def test_check_if_region_is_ignored_for_os_for_chukotka(row_for_chukotka):
-    parsed_row = beautifier.parse_row(row_for_chukotka)
+def test_check_if_region_is_ignored_for_os_for_chukotka(row_for_chukotka_for_os):
+    parsed_row = beautifier.parse_row(row_for_chukotka_for_os)
     tailored_row = beautifier.make_tailored_row(parsed_row)
     result = beautifier.check_if_region_is_ignored(tailored_row)
 

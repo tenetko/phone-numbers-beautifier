@@ -16,11 +16,12 @@ class PhoneNumbersBeautifierTZB(PhoneNumbersBeautifier):
         ignored_records = []
 
         for _, row in dataframe.iterrows():
-            if pd.isna(row["REGION"]):
-                empty_phone_numbers.append(row["num"])
+            if pd.isna(row["Регион"]):
+                empty_phone_numbers.append(row["Номер телефона"])
                 continue
 
             parsed_row = self.parse_row(row)
+            print(parsed_row)
 
             if not self.check_if_region_is_allowed(parsed_row):
                 log_row = self.make_log_row_for_missing_region(parsed_row)
@@ -62,13 +63,13 @@ class PhoneNumbersBeautifierTZB(PhoneNumbersBeautifier):
 
     def parse_row(self, row: Series) -> Dict[str, str]:
         return {
-            "phone_number": str(row["num"]).replace(" ", ""),
-            "region": row["REGION"],
-            "operator": row["OPERATOR"],
+            "phone_number": str(row["Номер телефона"]).replace(" ", ""),
+            "region": row["Регион"],
+            "operator": row["Оператор сотовой связи"],
             "Пол": row["Пол"],
             "Возраст": row["Возраст"],
-            "iSayMail": row["iSayMail"],
-            "Reward": row["Reward"],
+            "iSayMail": row["Email"],
+            "Reward": row["Обещанная награда"],
             "Source": row["Source"],
         }
 
@@ -88,11 +89,17 @@ class PhoneNumbersBeautifierTZB(PhoneNumbersBeautifier):
 
     def make_tailored_row(self, parsed_row: Dict[str, str]) -> Dict[str, str]:
         phone_number = self.try_to_validate_phone_number(parsed_row["phone_number"])
+        print(phone_number)
         region = self.get_refined_region(parsed_row)
+        print(region)
         operator = self.get_operator(parsed_row)
+        print(operator)
         interval = self.get_interval(region)
+        print(interval)
         region_code = self.get_region_code(region)
+        print(region_code)
         operator_code = self.get_operator_code(operator)
+        print(operator_code)
 
         return {
             "Number": phone_number,

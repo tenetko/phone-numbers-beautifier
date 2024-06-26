@@ -6,6 +6,24 @@ from pytest import fixture
 def row_simple() -> Series:
     return Series(
         data={
+            "Номер телефона": 79001979228,
+            "IdRegion": 83,
+            "IdOper": 28,
+            "Регион": "Свердловская обл.",
+            "Оператор сотовой связи": 'ООО "ЕКАТЕРИНБУРГ-2000"',
+            "Пол": "Ж",
+            "Возраст": 30,
+            "Email": "00000000-1111-2222-3333-444444444444@i.inb.youthink.dev",
+            "Обещанная награда": 150,
+            "Source": "source_one",
+        }
+    )
+
+
+@fixture
+def row_simple_for_os() -> Series:
+    return Series(
+        data={
             "num": 79001979228,
             "IdRegion": 83,
             "IdOper": 28,
@@ -13,8 +31,8 @@ def row_simple() -> Series:
             "OPERATOR": 'ООО "ЕКАТЕРИНБУРГ-2000"',
             "Пол": "Ж",
             "Возраст": 30,
-            "iSayMail": "00000000-1111-2222-3333-444444444444@i.inb.youthink.dev",
-            "Reward": 150,
+            "Email": "00000000-1111-2222-3333-444444444444@i.inb.youthink.dev",
+            "Обещанная награда": 150,
             "Source": "source_one",
         }
     )
@@ -24,15 +42,15 @@ def row_simple() -> Series:
 def row_simple_source_two() -> Series:
     return Series(
         data={
-            "num": 79001979228,
+            "Номер телефона": 79001979228,
             "IdRegion": 83,
             "IdOper": 28,
-            "REGION": "Свердловская обл.",
-            "OPERATOR": 'ООО "ЕКАТЕРИНБУРГ-2000"',
+            "Регион": "Свердловская обл.",
+            "Оператор сотовой связи": 'ООО "ЕКАТЕРИНБУРГ-2000"',
             "Пол": "Ж",
             "Возраст": 30,
-            "iSayMail": "00000000-1111-2222-3333-444444444444@i.inb.youthink.dev",
-            "Reward": 150,
+            "Email": "00000000-1111-2222-3333-444444444444@i.inb.youthink.dev",
+            "Обещанная награда": 150,
             "Source": "source_two",
         }
     )
@@ -42,6 +60,24 @@ def row_simple_source_two() -> Series:
 def row_for_nonexistent_region() -> Series:
     return Series(
         data={
+            "Номер телефона": 79001979228,
+            "IdRegion": 83,
+            "IdOper": 28,
+            "Регион": "Волчий край",
+            "Оператор сотовой связи": 'ООО "ЕКАТЕРИНБУРГ-2000"',
+            "Пол": "Ж",
+            "Возраст": 30,
+            "Email": "00000000-1111-2222-3333-444444444444@i.inb.youthink.dev",
+            "Обещанная награда": 150,
+            "Source": "source_one",
+        }
+    )
+
+
+@fixture
+def row_for_nonexistent_region_for_os() -> Series:
+    return Series(
+        data={
             "num": 79001979228,
             "IdRegion": 83,
             "IdOper": 28,
@@ -49,8 +85,8 @@ def row_for_nonexistent_region() -> Series:
             "OPERATOR": 'ООО "ЕКАТЕРИНБУРГ-2000"',
             "Пол": "Ж",
             "Возраст": 30,
-            "iSayMail": "00000000-1111-2222-3333-444444444444@i.inb.youthink.dev",
-            "Reward": 150,
+            "Email": "00000000-1111-2222-3333-444444444444@i.inb.youthink.dev",
+            "Обещанная награда": 150,
             "Source": "source_one",
         }
     )
@@ -60,6 +96,24 @@ def row_for_nonexistent_region() -> Series:
 def row_for_chukotka() -> Series:
     return Series(
         data={
+            "Номер телефона": 79001979228,
+            "IdRegion": 104,
+            "IdOper": 78,
+            "Регион": "Чукотский АО",
+            "Оператор сотовой связи": 'ПАО "Вымпел-Коммуникации"',
+            "Пол": "Ж",
+            "Возраст": 30,
+            "Email": "00000000-1111-2222-3333-444444444444@i.inb.youthink.dev",
+            "Обещанная награда": 150,
+            "Source": "source_one",
+        }
+    )
+
+
+@fixture
+def row_for_chukotka_for_os() -> Series:
+    return Series(
+        data={
             "num": 79001979228,
             "IdRegion": 104,
             "IdOper": 78,
@@ -67,8 +121,8 @@ def row_for_chukotka() -> Series:
             "OPERATOR": 'ПАО "Вымпел-Коммуникации"',
             "Пол": "Ж",
             "Возраст": 30,
-            "iSayMail": "00000000-1111-2222-3333-444444444444@i.inb.youthink.dev",
-            "Reward": 150,
+            "Email": "00000000-1111-2222-3333-444444444444@i.inb.youthink.dev",
+            "Обещанная награда": 150,
             "Source": "source_one",
         }
     )
@@ -78,15 +132,15 @@ def row_for_chukotka() -> Series:
 def row_for_motiv() -> Series:
     return Series(
         data={
-            "num": 79011234567,
+            "Номер телефона": 79011234567,
             "IdRegion": 83,
             "IdOper": 28,
-            "REGION": "Курганская обл.",
-            "OPERATOR": 'ООО "ЕКАТЕРИНБУРГ-2000"',
+            "Регион": "Курганская обл.",
+            "Оператор сотовой связи": 'ООО "ЕКАТЕРИНБУРГ-2000"',
             "Пол": "Ж",
             "Возраст": 30,
-            "iSayMail": "00000000-1111-2222-3333-444444444444@i.inb.youthink.dev",
-            "Reward": 150,
+            "Email": "00000000-1111-2222-3333-444444444444@i.inb.youthink.dev",
+            "Обещанная награда": 150,
             "Source": "source_one",
         }
     )
@@ -96,15 +150,15 @@ def row_for_motiv() -> Series:
 def row_for_yota_moscow() -> Series:
     return Series(
         data={
-            "num": 79029876543,
+            "Номер телефона": 79029876543,
             "IdRegion": 83,
             "IdOper": 28,
-            "REGION": "г. Москва * Московская область",
-            "OPERATOR": 'ООО "Скартел"',
+            "Регион": "г. Москва * Московская область",
+            "Оператор сотовой связи": 'ООО "Скартел"',
             "Пол": "Ж",
             "Возраст": 30,
-            "iSayMail": "00000000-1111-2222-3333-444444444444@i.inb.youthink.dev",
-            "Reward": 150,
+            "Email": "00000000-1111-2222-3333-444444444444@i.inb.youthink.dev",
+            "Обещанная награда": 150,
             "Source": "source_one",
         }
     )
@@ -114,15 +168,15 @@ def row_for_yota_moscow() -> Series:
 def row_for_yota_krasnodar_kray() -> Series:
     return Series(
         data={
-            "num": 79029876543,
+            "Номер телефона": 79029876543,
             "IdRegion": 83,
             "IdOper": 28,
-            "REGION": "Краснодарский край",
-            "OPERATOR": 'ООО "Скартел"',
+            "Регион": "Краснодарский край",
+            "Оператор сотовой связи": 'ООО "Скартел"',
             "Пол": "Ж",
             "Возраст": 30,
-            "iSayMail": "00000000-1111-2222-3333-444444444444@i.inb.youthink.dev",
-            "Reward": 150,
+            "Email": "00000000-1111-2222-3333-444444444444@i.inb.youthink.dev",
+            "Обещанная награда": 150,
             "Source": "source_one",
         }
     )
@@ -132,15 +186,15 @@ def row_for_yota_krasnodar_kray() -> Series:
 def row_for_sim_telecom() -> Series:
     return Series(
         data={
-            "num": 79029876543,
+            "Номер телефона": 79029876543,
             "IdRegion": 83,
             "IdOper": 28,
-            "REGION": "Краснодарский край",
-            "OPERATOR": 'ООО "СИМ ТЕЛЕКОМ"',
+            "Регион": "Краснодарский край",
+            "Оператор сотовой связи": 'ООО "СИМ ТЕЛЕКОМ"',
             "Пол": "Ж",
             "Возраст": 30,
-            "iSayMail": "00000000-1111-2222-3333-444444444444@i.inb.youthink.dev",
-            "Reward": 150,
+            "Email": "00000000-1111-2222-3333-444444444444@i.inb.youthink.dev",
+            "Обещанная награда": 150,
             "Source": "source_one",
         }
     )
