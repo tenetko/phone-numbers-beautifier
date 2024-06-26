@@ -70,6 +70,13 @@ def test_get_quota_balance_for_empty_quota():
     assert result == expected_result
 
 
+def test_get_quota_balance_for_zero_quota():
+    result = quotas_parser.get_quota_balance(20, 20)
+    expected_result = 0
+
+    assert result == expected_result
+
+
 def test_get_quota_gender_for_empty_quota_name():
     result = quotas_parser.get_quota_gender("")
     expected_result = ""
