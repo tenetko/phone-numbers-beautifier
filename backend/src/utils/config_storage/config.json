@@ -815,5 +815,18 @@
         "2": 21,
         "3": 36,
         "4": 46
+    },
+    "timezones": {
+        "UTC +2": "Europe/Kaliningrad",
+        "UTC +3": "Europe/Moscow",
+        "UTC +4": "Europe/Samara",
+        "UTC +5": "Asia/Yekaterinburg",
+        "UTC +6": "Asia/Omsk",
+        "UTC +7": "Asia/Krasnoyarsk",
+        "UTC +8": "Asia/Irkutsk",
+        "UTC +9": "Asia/Yakutsk",
+        "UTC +10": "Asia/Vladivostok",
+        "UTC +11": "Asia/Magadan",
+        "UTC +12": "Asia/Kamchatka"
     }
 }

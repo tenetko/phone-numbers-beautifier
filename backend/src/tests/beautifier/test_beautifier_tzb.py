@@ -188,8 +188,8 @@ def test_make_tailored_row_for_tzb(row_simple):
         "TimeDifference": "UTC +5",
         "Region": 12,
         "Operator": 7,
-        "CallIntervalBegin": "08:00:00",
-        "CallIntervalEnd": "20:00:00",
+        "CallIntervalBegin": "10:00:00",
+        "CallIntervalEnd": "22:00:00",
         "Group": "Свердловская область_Мотив_iSay",
         "CHECK": "9001979228",
         "Mark": "12_7",
@@ -198,6 +198,7 @@ def test_make_tailored_row_for_tzb(row_simple):
         "iSayMail": "00000000-1111-2222-3333-444444444444@i.inb.youthink.dev",
         "Reward": 150,
         "SOURCE": "3",
+        "TimeZone": "Asia/Yekaterinburg",
     }
 
     assert result == expected_result
@@ -242,5 +243,12 @@ def test_check_if_operator_is_other_for_tzb_for_sim_telecom(row_for_sim_telecom)
 def test_get_refined_quota_region():
     result = beautifier.get_refined_quota_region("Удмуртская Республика")
     expected_result = "Республика Удмуртская"
+
+    assert result == expected_result
+
+
+def test_get_timezone():
+    result = beautifier.get_timezone("UTC +2")
+    expected_result = "Europe/Kaliningrad"
 
     assert result == expected_result

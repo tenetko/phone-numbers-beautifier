@@ -90,19 +90,19 @@ class PhoneNumbersBeautifierTZB(PhoneNumbersBeautifier):
         phone_number = self.try_to_validate_phone_number(parsed_row["phone_number"])
         region = self.get_refined_region(parsed_row)
         operator = self.get_operator(parsed_row)
-        interval = self.get_interval(region)
         region_code = self.get_region_code(region)
         operator_code = self.get_operator_code(operator)
+        time_difference = self.get_time_difference(region)
 
         return {
             "Number": phone_number,
             "RegionName": region,
             "OperatorName": operator,
-            "TimeDifference": self.get_time_difference(region),
+            "TimeDifference": time_difference,
             "Region": region_code,
             "Operator": operator_code,
-            "CallIntervalBegin": interval["begin"],
-            "CallIntervalEnd": interval["end"],
+            "CallIntervalBegin": "10:00:00",
+            "CallIntervalEnd": "22:00:00",
             "Group": self.get_tzb_group(region, operator, parsed_row["Source"]),
             "CHECK": self.get_external_id(phone_number),
             "Mark": self.get_tzb_mark(region_code, operator_code),
@@ -111,6 +111,7 @@ class PhoneNumbersBeautifierTZB(PhoneNumbersBeautifier):
             "iSayMail": parsed_row["iSayMail"],
             "Reward": parsed_row["Reward"],
             "SOURCE": "3",  # A static fixed value required by another program for some reason
+            "TimeZone": self.get_timezone(time_difference),
         }
 
     def check_if_operator_is_allowed(self, tailored_row: Dict[str, str]) -> bool:
@@ -137,3 +138,6 @@ class PhoneNumbersBeautifierTZB(PhoneNumbersBeautifier):
 
     def get_tzb_mark(self, region_code: str, operator_code: str) -> str:
         return f"{region_code}_{operator_code}"
+
+    def get_timezone(self, time_difference: str) -> str:
+        return self.config["timezones"][time_difference]
