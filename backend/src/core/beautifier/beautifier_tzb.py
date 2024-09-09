@@ -30,7 +30,7 @@ class PhoneNumbersBeautifierTZB(PhoneNumbersBeautifier):
             tailored_row = self.make_tailored_row(parsed_row)
 
             if not self.check_if_phone_number_is_valid(tailored_row["Number"]):
-                empty_phone_numbers.append(row["num"])
+                empty_phone_numbers.append(row["Номер телефона"])
                 continue
 
             if self.check_if_region_is_ignored(tailored_row):
@@ -62,7 +62,7 @@ class PhoneNumbersBeautifierTZB(PhoneNumbersBeautifier):
 
     def parse_row(self, row: Series) -> Dict[str, str]:
         return {
-            "phone_number": str(row["Номер телефона"]).replace(" ", ""),
+            "phone_number": str(int(row["Номер телефона"])).replace(" ", ""),
             "region": row["Регион"],
             "operator": row["Оператор сотовой связи"],
             "Пол": row["Пол"],
