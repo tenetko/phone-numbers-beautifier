@@ -81,7 +81,7 @@ class QuotasParser:
         splitted_string = raw_quota_name.split(">")
 
         # We had to hardcode that because we cannot get that changed in any other way
-        if splitted_string[1].strip() == "Tele2":
+        if splitted_string[1].strip() == "Tele2 / t2":
             return "Теле-2"
 
         if splitted_string[1].strip() == "Yota (Йота)":
