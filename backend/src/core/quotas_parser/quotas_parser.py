@@ -63,6 +63,10 @@ class QuotasParser:
 
         elif "/" not in raw_region_name:
             region_name = raw_region_name.split(">")[0].strip()
+
+        elif "Тыва" in raw_region_name and "Tele2" in raw_region_name:
+            region_name = raw_region_name.split(">")[0].strip()
+
         else:
             # "Абакан/Республика Хакасия" --> "Республика Хакасия"
             splitted_string = raw_region_name.split("/")

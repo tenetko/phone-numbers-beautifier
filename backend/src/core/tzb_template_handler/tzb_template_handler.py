@@ -77,7 +77,7 @@ class TZBTemplateHandler:
             result_dataframes.append(completed_dataframe)
 
             # Drop 'Пол' and 'Возраст' columns according to the client requirement
-            if set(['Пол', 'Возраст']).issubset(result_dataframes[0].columns):
+            if set(["Пол", "Возраст"]).issubset(result_dataframes[0].columns):
                 result_dataframes[0].drop(inplace=True, columns=["Пол", "Возраст"])
 
             result_dataframes[0].drop_duplicates(inplace=True, subset="Number", keep="first")
