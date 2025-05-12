@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: phone-numbers-beautifier
+  namespace: ipsos
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: phone-numbers-beautifier-server
+  template:
+    metadata:
+      labels:
+        app: phone-numbers-beautifier-server
+    spec:
+      containers:
+      - name: phone-numbers-beautifier-pod
+        image: registry.gitlab.com/tenetko/phone-numbers-beautifier:1.0
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 80
+      imagePullSecrets:
+      - name: phone-numbers-beautifier-deploy-token-secret

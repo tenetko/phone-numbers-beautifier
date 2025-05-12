@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: phone-numbers-beautifier-service
+  namespace: ipsos
+spec:
+  selector:
+    app: phone-numbers-beautifier-server
+  type: ClusterIP
+  ports:
+    - name: httpport
+      port: 8000
+      protocol: TCP
+      targetPort: 8000

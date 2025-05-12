@@ -204,3 +204,5 @@ packages/react-devtools-timeline/dist
 
 xlsx
 quotas.json
+
+.python-version
