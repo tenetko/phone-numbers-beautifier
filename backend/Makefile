@@ -11,4 +11,4 @@ isort-fix:
 	poetry run python -m isort -l 120 .
 
 test:
-	poetry run pytest -v
+	poetry run python -m pytest ./ -vv
