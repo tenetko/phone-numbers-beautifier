@@ -4,7 +4,6 @@ from fastapi.staticfiles import StaticFiles
 
 from src.api.router import api_router, static_router
 
-
 app = FastAPI(title="Phone Numbers Beautifier Backend")
 
 app.add_middleware(
