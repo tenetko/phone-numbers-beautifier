@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: phone-numbers-beautifier-pod
-        image: registry.gitlab.com/tenetko/phone-numbers-beautifier:1.0
+        image: registry.gitlab.com/tenetko/phone-numbers-beautifier:1.4
         imagePullPolicy: Always
         ports:
           - containerPort: 80
