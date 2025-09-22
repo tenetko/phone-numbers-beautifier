@@ -88,6 +88,12 @@ class QuotasParser:
         if splitted_string[1].strip() == "Tele2 / t2":
             return "Теле-2"
 
+        if splitted_string[1].strip() == "Tele2 / T2":
+            return "Теле-2"
+
+        if splitted_string[1].strip() == "Tele2 / Т2":
+            return "Теле-2"
+
         if splitted_string[1].strip() == "Yota (Йота)":
             return "Йота"
 
